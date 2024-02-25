@@ -55,9 +55,36 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    msg = ''
 
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
 
-    return render_template('7_login.html')
+        # Get user data from MySQL
+        cursor = getCursor()
+        cursor.execute('SELECT user_id, username, password, role FROM user WHERE username = %s', (username,))
+        user = cursor.fetchone()
+
+        if hashing.check_value(user[2], password, salt='8010'):
+            session['loggedin'] = True
+            session['id'] = user[0]
+            session['username'] = user[1]
+            session['role'] = user[4]
+            # Directed to a different dashboard.
+            if user[4] == 'agronomist':
+                return redirect(url_for('agro'))
+            elif user[4] == 'staff':
+                return redirect(url_for('staff'))
+            elif user[4] == 'admin':
+                return redirect(url_for('admin'))
+            else:
+                return redirect(url_for('home'))
+        else:
+            # Account doesnt exist or username incorrect
+            msg = 'Incorrect username'
+    # Show the login form with message (if any)
+    return render_template('7_login.html', msg=msg)
 
 @app.route('/profile')
 def profile():
