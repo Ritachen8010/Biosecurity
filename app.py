@@ -49,29 +49,67 @@ def staff_home():
 def admin_home():
     return render_template('5_admin.html')
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    return render_template('6_register.html')
+    msg = ''
+
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
+        username = request.form['username']
+        password = request.form['password']
+        email = request.form['email']
+        first_name = request.form['first_name']  
+        last_name = request.form['last_name']    
+        phone_number = request.form['phone_number']  
+        address = request.form['address']
+        role = request.form['role']
+
+        # Check if account exists using MySQL
+        cursor = getCursor()
+        cursor.execute('SELECT * FROM user WHERE username = %s', (username,))
+        account = cursor.fetchone()
+        # If account exists show error and validation checks
+        if account:
+            msg = 'Account already exists!'
+        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+            msg = 'Invalid email address!'
+        elif not re.match(r'[A-Za-z0-9]+', username):
+            msg = 'Username must contain only characters and numbers!'
+        elif not username or not password or not email:
+            msg = 'Please fill out the form!'
+        else:
+            # Account doesnt exists and the form data is valid, now insert new account into accounts table
+            hashed = hashing.hash_value(password, salt='8010')
+            cursor.execute('INSERT INTO user VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (username, password, email, first_name, last_name, phone_number, address, role))
+            connection.commit()
+            msg = 'You have successfully registered!'
+    elif request.method == 'POST':
+        # Form is empty... (no POST data)
+        msg = 'Please fill out the form!'
+    # Show registration form with message (if any)
+    return render_template('6_register.html', msg=msg)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     msg = ''
 
-    if request.method == 'POST':
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         username = request.form['username']
         password = request.form['password']
-
+        
         # Get user data from MySQL
         cursor = getCursor()
-        cursor.execute('SELECT user_id, username, password, role FROM user WHERE username = %s', (username,))
+        cursor.execute('SELECT * FROM user WHERE username = %s', (username,))
         user = cursor.fetchone()
 
-        if hashing.check_value(user[2], password, salt='8010'):
-            session['loggedin'] = True
-            session['id'] = user[0]
-            session['username'] = user[1]
-            session['role'] = user[4]
-            # Directed to a different dashboard.
+        if user is not None:
+            password = user[2]
+
+            if hashing.check_value(user[2], password, salt='8010'):
+                session['loggedin'] = True
+                session['id'] = user[0]
+                session['username'] = user[1]
+                session['role'] = user[4]
+                # Directed to a different dashboard.
             if user[4] == 'agronomist':
                 return redirect(url_for('agro'))
             elif user[4] == 'staff':
@@ -88,4 +126,4 @@ def login():
 
 @app.route('/profile')
 def profile():
-    return render_template('8_profile.html')
+    return render_template('8_profile_agro.html')

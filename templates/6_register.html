@@ -1,6 +1,6 @@
 {% extends "1_home.html" %}
 
-{% block title %}REGISTER{% endblock %}
+{% block title %}REGISTER - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
 
 {% block content %}
 	<body>
@@ -11,21 +11,48 @@
 				<a href="{{ url_for('register') }}" class="active">Register</a>
 			</div>
 			<form action="{{ url_for('register') }}" method="post" autocomplete="off">
+				
+				<label for="first_name">
+					<i class="fas fa-user"></i>
+				</label>
+				<input type="text" name="first_name" placeholder="First Name" id="first_name" required>
+
+				<label for="last_name">
+					<i class="fas fa-user"></i>
+				</label>
+				<input type="text" name="last_name" placeholder="Last Name" id="last_name" required>
+
 				<label for="username">
 					<i class="fas fa-user"></i>
 				</label>
 				<input type="text" name="username" placeholder="Username" id="username" required>
+
+				<label for="address">
+					<i class="fas fa-user"></i>
+				</label>
+				<input type="text" name="address" placeholder="Address" id="address" required>
+
+				<label for="phone_number">
+					<i class="fas fa-user"></i>
+				</label>
+    			<input type="text" name="phone_number" placeholder="Phone Number" id="phone_number" required>
+				
 				<label for="password">
 					<i class="fas fa-lock"></i>
 				</label>
 				<input type="password" name="password" placeholder="Password" id="password" required>
+
 				<label for="email">
 					<i class="fas fa-envelope"></i>
 				</label>
 				<input type="email" name="email" placeholder="Email" id="email" required>
+
 				<div class="msg">{{ msg }}</div>
+
 				<input type="submit" value="Register">
+
 			</form>
 		</div>
 	</body>
 </html>
+{% endblock %}
