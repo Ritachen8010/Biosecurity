@@ -1,7 +1,37 @@
 {% extends "1_home.html" %}
 
-{% block title %}Administrator - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
+{% block title %}Administrator Pest/Weed View & Edit - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
 
 {% block content %}
+
+<div class="p-5 bg-light text-black text-center">
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+        <!-- Navi -->
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ url_for('admin_home') }}">Edit Pest/Weed</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin_m_agro') }}">Edit Agronomists Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin_m_staff') }}">Edit Staff Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin_profile') }}">Personal Profile</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container-sm mb-2">
+    <!-- Search bar -->
+    <form class="d-flex mb-5">
+        <input class="form-control-sm me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success btn-sm" type="submit">Search</button>
+    </form>
 
 {% endblock %}

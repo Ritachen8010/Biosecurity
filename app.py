@@ -117,20 +117,34 @@ def agro_profile():
 
 @app.route('/staff/home')
 def staff_home():
-    return render_template('4_staff_home.html')
+    if 'loggedin' in session:
+        # login and fetch details
+        cursor = getCursor()
+        cursor.execute('SELECT * FROM staff_admin WHERE user_id = %s', (session['id'],))
+        staff_info = cursor.fetchone()
+        print("staff Info:", staff_info)
+
+    return render_template('4_staff_home.html', staff_info=staff_info)
 
 @app.route('/staff/view_agro_profile')
 def staff_view_agro():
-    cursor = getCursor()
-    cursor.execute('''
-        SELECT agro.agro_id, agro.first_name, agro.last_name, agro.address, 
-               agro.phone_num, agro.date_joined, user.username, user.email, user.status
-        FROM agro
-        JOIN user ON agro.user_id = user.user_id
-    ''')
-    combined_list = cursor.fetchall()
+    if 'loggedin' in session:
+        # login and fetch details
+        cursor = getCursor()
+        cursor.execute('SELECT * FROM staff_admin WHERE user_id = %s', (session['id'],))
+        staff_info = cursor.fetchone()
+        print("staff Info:", staff_info)
 
-    return render_template('4_staff_view_agro.html', combined_list=combined_list)
+
+        cursor.execute('''
+            SELECT agro.agro_id, agro.first_name, agro.last_name, agro.address, 
+                agro.phone_num, agro.date_joined, user.username, user.email, user.status
+            FROM agro
+            JOIN user ON agro.user_id = user.user_id
+        ''')
+        combined_list = cursor.fetchall()
+
+    return render_template('4_staff_view_agro.html', combined_list=combined_list, staff_info=staff_info)
 
 @app.route('/staff/profile')
 def staff_profile():
@@ -210,9 +224,19 @@ def staff_profile():
 def admin_home():
     return render_template('5_admin_home.html')
 
+@app.route('/admin/manage_agro')
+def admin_m_agro():
+    return render_template('5_admin_manage_agro.html')
+
+@app.route('/admin/manage_staff')
+def admin_m_staff():
+    return render_template('5_admin_manage_staff.html')
+
 @app.route('/admin/profile')
 def admin_profile():
     return render_template('5_admin_profile.html')
+
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
