@@ -42,9 +42,9 @@ def agro_home():
 
 @app.route('/agro_profile', methods=['GET', 'POST'])
 def agro_profile():
-    # 检查用户是否已登录
+    # check if loggined
     if 'loggedin' in session:
-        # 用户已登录，获取用户的详细信息
+        # login and fetch details
         cursor = getCursor()
         cursor.execute('SELECT * FROM agro WHERE user_id = %s', (session['id'],))
         agro_info = cursor.fetchone()
@@ -66,12 +66,11 @@ def agro_profile():
                 # if password incorect
                 return render_template('agro_profile.html', msg='Current password is incorrect.', agro=agro_info)
 
-            # 验证新密码和确认密码是否匹配
+            # check old password and new password
             if new_password != confirm_password:
-                # 新密码和确认密码不匹配
                 return render_template('agro_profile.html', msg='New password and confirm password do not match.', agro=agro_info)
 
-            # 更新用户信息和密码
+            # updated user and password
             hashed_new_password = hashing.hash_value(new_password, salt='8010')
             cursor.execute('UPDATE agro SET first_name=%s, last_name=%s, address=%s, phone_num=%s WHERE user_id=%s',
                            (first_name, last_name, address, phone_num, session['id']))
