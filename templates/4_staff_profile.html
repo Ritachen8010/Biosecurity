@@ -1,7 +1,101 @@
 {% extends "1_home.html" %}
 
-{% block title %}Staff - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
+{% block title %}Profile - Agronomists - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
 
 {% block content %}
+
+<div class="p-5 bg-light text-black text-center">
+    <h1>Welcome! {{ staff[2] + ' ' + staff[3] }}</h1>
+    <p>Staff ID: {{ staff[0] }}</p>
+    <p>Username: {{ session ['username'] }}</p>
+    <p>Position: {{ staff[6] }}</p>
+    <p>Department: {{ staff[7] }}</p>
+    <p>Hire Date: {{ staff[5] }}</p>
+    <p>Status: {{ session['status'] }}</p>
+</div>
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+        <!-- Navi -->
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('staff_home') }}">Pest/Weed Edit</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('staff_view_agro') }}">View Agronomists Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ url_for('staff_profile') }}">Personal Profile</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+    <div class="container mt-5">
+        <form action="{{ url_for('staff_profile') }}" method="post">
+            <div class="mb-3">
+                <label for="frist_name" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First Name" value="{{ staff[2] }}"  
+                required pattern="[A-Za-z]+"  title="Please enter characters only">
+            </div>
+            <div class="mb-3">
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last Name" value="{{ staff[3] }}" 
+                required pattern="[A-Za-z]+" title="Please enter characters only">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{ session['email'] }}" 
+                required title="Please enter your address" >
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="phone" name="phone_num" placeholder="Phone Number" value="{{ staff[4] }}" 
+                required pattern="\d{3}-\d{7,8}" title="Please enter your Phone Number, e.g., 123-4567890">
+            </div>
+            <div class="mb-4">
+                <label for="currentPassword" class="form-label">Current Password</label>
+                <input type="password" class="form-control" id="currentPassword" name="currentPassword" 
+                required>
+            </div>
+            <div class="mb-3">
+                <label for="newPassword" class="form-label">New Password</label>
+                <input type="password" class="form-control" id="newPassword" name="newPassword" 
+                required pattern="(?=.*[A-Za-z])(?=.*\d).{8,}" title="Please enter at least 8 characters long and mix of character types">
+            </div>
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" 
+                required pattern="(?=.*[A-Za-z])(?=.*\d).{8,}" title="Please enter at least 8 characters long and mix of character types">
+            </div>
+            <button type="submit" class="btn btn-primary mb-5">Update Details</button>
+        </form>
+    </div>
+</div>
+
+<div id="msg" style="display: none;">{{ msg }}</div>
+
+<script>
+    // loading and execute
+    document.addEventListener('DOMContentLoaded', function () {
+        // check if 'msg'
+        var msgElement = document.getElementById('msg');
+        
+        // find msg
+        if (msgElement && msgElement.textContent.trim() !== '') {
+            // show msg
+            alert(msgElement.textContent.trim());
+        }
+    });
+
+</script>
+
+
+<footer class="container-fluid p-5 bg-light text-black text-center">
+    <h5>AGRICULTURAL | BIOSECURITY | PEST AND WEED</h5>
+    </footer>
 
 {% endblock %}

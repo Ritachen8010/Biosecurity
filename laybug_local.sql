@@ -39,12 +39,12 @@ VALUES
 ('pinapple123', 'password123', 'pinapple.blueberry@example.com', 'agronomist', 'active');
 
 -- insert data - staff
-INSERT INTO `user` (`user_id`, `username`, `password`, `email`, `role`, `status`)
+INSERT INTO `user` (`user_id`, `username`, `password`, `email`, `role`)
 VALUES
-('1', 'rita123', 'password123', 'rita.chen@example.com', 'admin', 'active'),
-('2', 'lyn123', 'password123', 'lyn.jin@example.com', 'staff', 'active'),
-('3', 'lana1124', 'password123', 'lana.su@example.com', 'staff', 'active'),
-('4', 'fye1156', 'password123', 'fye.xiang@example.com', 'staff', 'active');
+('1', 'rita123', 'password123', 'rita.chen@example.com', 'admin'),
+('2', 'lyn123', 'password123', 'lyn.jin@example.com', 'staff'),
+('3', 'lana1124', 'password123', 'lana.su@example.com', 'staff'),
+('4', 'fye1156', 'password123', 'fye.xiang@example.com', 'staff');
 
 -- create agro table
 CREATE TABLE `agro`(

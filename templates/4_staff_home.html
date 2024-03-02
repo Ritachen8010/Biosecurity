@@ -4,4 +4,37 @@
 
 {% block content %}
 
+<div class="p-5 bg-light text-black text-center">
+    <h1>Welcome!</h1>
+    <p>....</p> 
+</div>
+
+<!-- Staff should be able to manage their own profile (update personal information and change
+password), view Agronomists profiles and manage the guide (view, add, update and delete
+details and images – including selecting the primary image). -->
+
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+        <!-- Navi -->
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ url_for('staff_home') }}">Pest/Weed Edit</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('staff_view_agro') }}">View Agronomists Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('staff_profile') }}">Personal Profile</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container-sm mb-2">
+    <!-- Search bar -->
+    <form class="d-flex mb-5">
+        <input class="form-control-sm me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success btn-sm" type="submit">Search</button>
+    </form>
+
 {% endblock %}
