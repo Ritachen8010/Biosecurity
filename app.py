@@ -121,7 +121,16 @@ def staff_home():
 
 @app.route('/staff/view_agro_profile')
 def staff_view_agro():
-    return render_template('4_staff_view_agro.html')
+    cursor = getCursor()
+    cursor.execute('''
+        SELECT agro.agro_id, agro.first_name, agro.last_name, agro.address, 
+               agro.phone_num, agro.date_joined, user.username, user.email, user.status
+        FROM agro
+        JOIN user ON agro.user_id = user.user_id
+    ''')
+    combined_list = cursor.fetchall()
+
+    return render_template('4_staff_view_agro.html', combined_list=combined_list)
 
 @app.route('/staff/profile')
 def staff_profile():

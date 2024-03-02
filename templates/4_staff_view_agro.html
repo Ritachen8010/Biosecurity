@@ -1,0 +1,62 @@
+{% extends "1_home.html" %}
+
+{% block title %}View Agronomists List - Staff - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
+
+{% block content %}
+
+<div class="p-5 bg-light text-black text-center">
+    <h1>List of Agronomists</h1>
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+        <!-- Navi -->
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('staff_home') }}">Pest/Weed Edit</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ url_for('staff_view_agro') }}">View Agronomists Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('staff_profile') }}">Personal Profile</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<table class="text-center mt-5 mx-auto w-75 table table-bordered">
+    <thead>
+        <tr>
+            <th>Agronomist ID</th>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>email</th>
+            <th>Address</th>
+            <th>Phone Num</th>
+            <th>Date of Joined</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for list in combined_list %}
+        <tr>
+            <td>{{ list[0] }}</td>
+            <td>{{ list[1] }}</td>
+            <td>{{ list[2] }}</td>
+            <td>{{ list[3] }}</td>
+            <td>{{ list[4] }}</td>
+            <td>{{ list[5] }}</td>
+            <td>{{ list[6] }}</td>
+            <td>{{ list[7] }}</td>
+            <td>{{ list[8] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<footer class="container-fluid p-5 bg-light text-black text-center fixed-bottom">
+    <h5>AGRICULTURAL | BIOSECURITY | PEST AND WEED</h5>
+    </footer>
+{% endblock %}
