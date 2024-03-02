@@ -16,6 +16,7 @@ SELECT * FROM `staff_admin`;
 SELECT * FROM `guide_info`;
 SELECT * FROM `image`;
 
+SELECT * FROM `laybug` WHERE `username` = `%s`;
 
 -- create user table - manager user
 CREATE TABLE `user`(
@@ -870,18 +871,38 @@ VALUES
 -- further_info
 '• Popay I, Champion P, James TK 2010. An illustrated guide to common weeds of New Zealand. New Zealand Plant Protection Society, Christchurch, New Zealand. 416 p.');
 
+select * from `image`;
+drop table `image`;
+
 -- create image store table
 CREATE TABLE `image`(
 	`image_id` INT AUTO_INCREMENT,
     `guide_id` INT,
-    `image_path` VARCHAR(255),
+    `image_path` VARCHAR(500),
     `is_primary` BOOLEAN DEFAULT FALSE,
     PRIMARY KEY (`image_id`),
     FOREIGN KEY (`guide_id`) REFERENCES `guide_info`(`guide_id`)
 );
 
--- INSERT INTO `image` (`image_id`, `guide_id`, `image_path`, `is_primary`)
--- VALUES
-
-
-
+INSERT INTO `image` (`guide_id`, `image_path`, `is_primary`)
+VALUES
+('1', '1.jpg', true),
+('2', '2.jpg', true),
+('3', '3_4.jpg', true),
+('4', '3_4.jpg', true),
+('5', '5.jpg', true),
+('6', '6.jpg', true),
+('7', '7.jpg', true),
+('8', '8.jpg', true),
+('9', '9_10.jpg', true),
+('10', '9_10.jpg', true),
+('11', '11.jpg', true),
+('12', '12.jpg', true),
+('13', '13.jpg', true),
+('14', '14.jpg', true),
+('15', '15.jpg', true),
+('16', '16.jpg', true),
+('17', '17.jpg', true),
+('18', '18.jpg', true),
+('19', '19.jpg', true),
+('20', '20.jpg', true);

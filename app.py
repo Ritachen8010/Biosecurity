@@ -13,7 +13,6 @@ from flask_hashing import Hashing
 
 app = Flask(__name__)
 hashing = Hashing(app)  #create an instance of hashing
-
 # Change this to your secret key (can be anything, it's for extra protection)
 app.secret_key = '8010'
 
@@ -37,17 +36,71 @@ def home():
 def about_us():
     return render_template('2_about_us.html')
 
-@app.route('/agro')
-def agro():
-    return render_template('3_agro.html')
+@app.route('/agro_home')
+def agro_home():
+    return render_template('3_agro_home.html')
 
-@app.route('/staff')
+@app.route('/agro_profile', methods=['GET', 'POST'])
+def agro_profile():
+    # 检查用户是否已登录
+    if 'loggedin' in session:
+        # 用户已登录，获取用户的详细信息
+        cursor = getCursor()
+        cursor.execute('SELECT * FROM agro WHERE user_id = %s', (session['id'],))
+        agro_info = cursor.fetchone()
+
+        if request.method == 'POST':
+            first_name = request.form['first_name']
+            last_name = request.form['last_name']
+            address = request.form['address']
+            phone_num = request.form['phone_num']
+            email = request.form['email']
+            current_password = request.form['currentPassword']
+            new_password = request.form['newPassword']
+            confirm_password = request.form['confirmPassword']
+
+            # verify password
+            cursor.execute('SELECT password FROM user WHERE id = %s', (session['id'],))
+            stored_password = cursor.fetchone()[0]
+            if not hashing.check_value(stored_password, current_password, salt='8010'):
+                # if password incorect
+                return render_template('agro_profile.html', msg='Current password is incorrect.', agro=agro_info)
+
+            # 验证新密码和确认密码是否匹配
+            if new_password != confirm_password:
+                # 新密码和确认密码不匹配
+                return render_template('agro_profile.html', msg='New password and confirm password do not match.', agro=agro_info)
+
+            # 更新用户信息和密码
+            hashed_new_password = hashing.hash_value(new_password, salt='8010')
+            cursor.execute('UPDATE agro SET first_name=%s, last_name=%s, address=%s, phone_num=%s WHERE user_id=%s',
+                           (first_name, last_name, address, phone_num, session['id']))
+            cursor.execute('UPDATE user SET email=%s, password=%s WHERE id=%s', (email, hashed_new_password, session['id']))
+            connection.commit()
+            
+            # updated in session
+            session['email'] = email
+            
+            return redirect(url_for('agro_profile'))
+
+        return render_template('3_agro_profile.html', agro=agro_info)
+    return redirect(url_for('login'))
+
+@app.route('/staff/home')
 def staff_home():
-    return render_template('4_staff.html')
+    return render_template('4_staff_home.html')
 
-@app.route('/admin')
+@app.route('/staff/profile')
+def staff_profile():
+    return render_template('4_staff_profile.html')
+
+@app.route('/admin/home')
 def admin_home():
-    return render_template('5_admin.html')
+    return render_template('5_admin_home.html')
+
+@app.route('/admin/profile')
+def admin_profile():
+    return render_template('5_admin_profile.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -57,29 +110,48 @@ def register():
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
-        first_name = request.form['first_name']  
-        last_name = request.form['last_name']    
-        phone_number = request.form['phone_number']  
-        address = request.form['address']
-        role = request.form['role']
+        first_name = request.form.get('first_name') # .get() for KeyError
+        last_name = request.form.get('last_name')   # .get() for KeyError
+        phone_number = request.form.get('phone_number') # .get() for KeyError
+        address = request.form.get('address')
+        role = 'agronomist'  # defult agronomist when register
+        
+
+        cursor = getCursor()
 
         # Check if account exists using MySQL
-        cursor = getCursor()
         cursor.execute('SELECT * FROM user WHERE username = %s', (username,))
         account = cursor.fetchone()
+
+        # Check if email exists using MySQL
+        cursor.execute('SELECT * FROM user WHERE email = %s', (email,))
+        email = cursor.fetchone()
+        
+        # If email exists show error and validation checks
+        if email:
+            msg = 'This email address is already registered. Please use a different email or login.'
+
         # If account exists show error and validation checks
-        if account:
+        elif account:
             msg = 'Account already exists!'
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
             msg = 'Invalid email address!'
         elif not re.match(r'[A-Za-z0-9]+', username):
             msg = 'Username must contain only characters and numbers!'
-        elif not username or not password or not email:
+        elif not username or not password or not email or not first_name or not last_name:
             msg = 'Please fill out the form!'
         else:
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            hashed = hashing.hash_value(password, salt='8010')
-            cursor.execute('INSERT INTO user VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (username, password, email, first_name, last_name, phone_number, address, role))
+            password = hashing.hash_value(password, salt='8010')
+            # Insert data to user table
+            cursor.execute('INSERT INTO user (username, password, email, role) VALUES (%s, %s, %s, %s)', (username, password, email, role))
+            user_id = cursor.lastrowid
+
+            # Insert data to agro table
+            cursor.execute('INSERT INTO agro (user_id, first_name, last_name, phone_num, address, date_joined) VALUES (%s, %s, %s, %s, %s, CURDATE())', 
+                            (user_id, first_name, last_name, phone_number, address))
+
+            # For data change
             connection.commit()
             msg = 'You have successfully registered!'
     elif request.method == 'POST':
@@ -94,36 +166,50 @@ def login():
 
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         username = request.form['username']
-        password = request.form['password']
+        input_password = request.form['password']  # Use a different variable name to avoid confusion
         
         # Get user data from MySQL
         cursor = getCursor()
         cursor.execute('SELECT * FROM user WHERE username = %s', (username,))
         user = cursor.fetchone()
 
-        if user is not None:
-            password = user[2]
+        if user:
+            stored_password = user[2]  # Extract the stored hashed password
 
-            if hashing.check_value(user[2], password, salt='8010'):
+            # Check if the hashed input password matches the stored hashed password
+            if hashing.check_value(stored_password, input_password, salt='8010'):
+                print("Password verification succeeded.")
                 session['loggedin'] = True
                 session['id'] = user[0]
                 session['username'] = user[1]
+                session['email'] = user[3]
                 session['role'] = user[4]
-                # Directed to a different dashboard.
-            if user[4] == 'agronomist':
-                return redirect(url_for('agro'))
-            elif user[4] == 'staff':
-                return redirect(url_for('staff'))
-            elif user[4] == 'admin':
-                return redirect(url_for('admin'))
+
+                # Redirect to a different dashboard based on the user's role
+                if user[4] == 'agronomist':
+                    return redirect(url_for('agro_home'))
+                elif user[4] == 'staff':
+                    return redirect(url_for('staff_home'))
+                elif user[4] == 'admin':
+                    return redirect(url_for('admin_home'))
+                else:
+                    return redirect(url_for('home'))
             else:
-                return redirect(url_for('home'))
+                # If the password is incorrect, update the message
+                msg = 'Incorrect password!'
         else:
-            # Account doesnt exist or username incorrect
-            msg = 'Incorrect username'
-    # Show the login form with message (if any)
+            # If the account doesn't exist or the username is incorrect, update the message
+            msg = 'Incorrect username or account does not exist.'
+
+    # Show the login form with the message (if any)
     return render_template('7_login.html', msg=msg)
 
-@app.route('/profile')
-def profile():
-    return render_template('8_profile_agro.html')
+
+@app.route('/weed_list')
+def weed_list():
+    return render_template('9_weed_list.html')
+
+@app.route('/pest_list')
+def pest_list():
+    return render_template('10_pest_list.html')
+

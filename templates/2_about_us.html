@@ -3,12 +3,24 @@
 {% block title %}About Us - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
 
 {% block content %}
+
+{% if request.path == '/about_us' %}
+<div class="position-fixed text-center">
+    <img src="{{ url_for('static', filename='about-us/about-us.jpg') }}" class="img-fluid" alt="homepage">
+</div>
+{% endif %}
+
 <div class="position-absolute top-50 start-50 translate-middle">
     <h1 class="text-white fw-bold fs-4">ABOUT US</h1>
     <p class="text-white fs-4">The Website is developed based on AgPest and is only for student work.
     <br></br>
     If you have any questions, please contact us <a href="mailto:yychen8010@gmail.com">(email)</a>.
     <br></br>
-    Resource: <a href="https://agpest.co.nz/">AgPest</a></p>
+    Resource: <a href="https://agpest.co.nz/">AgPest</a> 
+    & <a href="https://www.goodhousekeeping.com/home/gardening/a20705991/garden-insect-pests/">Image</a>
+    </p>
 </div>
+
+
+
 {% endblock %}
