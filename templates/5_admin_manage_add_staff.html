@@ -1,0 +1,83 @@
+{% extends "1_home.html" %}
+
+{% block title %}Administrator - View/Edit Agronomist - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
+
+{% block content %}
+
+<!-- msg -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<div class="container mt-5">
+    <h2>Add Staff</h2>
+    <form action="{{ url_for('add_staff') }}" method="POST">
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" name="username" id="username"
+            required pattern="[A-Za-z0-9]+" title="Please enter characters with number">
+        </div>
+        <div class="mb-4">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" 
+            required pattern="(?=.*[A-Za-z])(?=.*\d).{8,}" 
+            title="Please enter at least 8 characters long and mix of character types">
+        </div>
+        <div class="mb-3">
+            <label for="first_name" class="form-label">First Name</label>
+            <input type="text" class="form-control" name="first_name" id="first_name"
+            required pattern="[A-Za-z]+" title="Please enter characters only">
+        </div>
+        <div class="mb-3">
+            <label for="last_name" class="form-label">Last Name</label>
+            <input type="text" class="form-control" name="last_name" id="last_name"
+            required pattern="[A-Za-z]+" title="Please enter characters only">
+        </div>
+        <div class="mb-3">
+            <label for="work_phone_num" class="form-label">Work Phone Number</label>
+            <input type="tel" class="form-control" name="work_phone_num" id="work_phone_num" 
+            required pattern="\d{3}-\d{7,8}" title="Please enter your Phone Number, e.g., 123-4567890">
+        </div>
+        <div class="mb-3">
+            <label for="dept" class="form-label">Department</label>
+            <input type="text" class="form-control" name="dept" id="dept" 
+            required>
+        </div>
+        <div class="mb-3">
+            <label for="hire_date">Hire Date</label>
+            <input type="date" class="form-control" id="hire_date" name="hire_date" required>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" name="email" id="email" required>
+        </div>
+        <div class="mb-3">
+            <label for="role">Role</label>
+            <input type="text" class="form-control" id="role" name="role" value="Staff" required>
+        </div>
+        <div class="mb-3">
+        <label for="status" class="form-label">Status</label>
+        <select class="form-select" name="status" id="status" required>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+        </select>
+
+        <div class="mt-5">
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a href="{{ url_for('admin_m_staff') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    // js to set the current date
+    document.getElementById('hire_date').valueAsDate = new Date();
+</script>
+
+{% endblock %}

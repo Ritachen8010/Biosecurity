@@ -523,6 +523,110 @@ def update_staff(id):
 
         return render_template('5_admin_manage_staff_edit.html', staff=staff)
 
+@app.route('/add_staff', methods=['GET', 'POST'])
+def add_staff():
+    if request.method == 'POST':
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        work_phone_num = request.form['work_phone_num']
+        hire_date = request.form['hire_date']
+        dept = request.form['dept']
+        username = request.form['username']
+        password = request.form['password'] #raw password
+        email = request.form['email']
+        role = request.form['role']
+        status = request.form['status']
+        print("Form data:", request.form)
+
+        # Check if username already exists
+        cursor = getCursor()
+        cursor.execute('SELECT * FROM user WHERE username = %s', (username,))
+        existing_user = cursor.fetchone()
+        if existing_user:
+            msg = 'Account already exists!'
+            return render_template('5_admin_manage_add_staff.html', msg=msg)
+
+        # hash with salt
+        hashed_password = hashing.hash_value(password, salt='8010')
+
+        # insert new staff
+        cursor = getCursor()
+        cursor.execute('INSERT INTO staff_admin (first_name, last_name, work_phone_num, hire_date, dept) VALUES (%s, %s, %s, %s, %s)',
+               (first_name, last_name, work_phone_num, hire_date, dept))
+        staff_id = cursor.lastrowid  # get new staff_id
+
+        # insert new user
+        cursor.execute('INSERT INTO user (username, password, email, role, status) VALUES (%s, %s, %s, %s, %s)',
+               (username, hashed_password, email, role, status))
+        user_id = cursor.lastrowid  # get new user_id
+
+        # update staff_admin.user id
+        cursor.execute('UPDATE staff_admin SET user_id = %s WHERE staff_id = %s', (user_id, staff_id))
+        connection.commit()
+
+        # success flash message
+        flash('Agro added successfully!', 'success')
+
+        cursor.close()
+
+        return redirect(url_for('admin_m_staff'))
+    else:
+        return render_template('5_admin_manage_add_staff.html')
+
+@app.route('/delete_staff/<int:staff_id>', methods=['POST'])
+def delete_staff(staff_id):
+    cursor = getCursor()
+    cursor.execute('SELECT staff_admin.staff_id, staff_admin.first_name, staff_admin.last_name, staff_admin.work_phone_num, staff_admin.hire_date, staff_admin.dept, user.user_id, user.username, user.password, user.email, user.role, user.status FROM staff_admin JOIN user ON staff_admin.user_id = user.user_id WHERE staff_admin.staff_id = %s', (staff_id,))
+    staff = cursor.fetchone()
+
+    try:
+        # delete from staff
+        cursor.execute('DELETE FROM staff_admin WHERE staff_id = %s', (staff_id,))
+        # delete from user
+        cursor.execute('DELETE FROM user WHERE user_id = %s', (staff[6],))
+        connection.commit()
+
+
+        flash('Staff deleted successfully!', 'success') # msg add when successed 
+
+        cursor.close()
+
+        return redirect(url_for('admin_m_staff', staff=staff))  # redirect to staff list
+    except Exception as e:
+        connection.rollback()  # rollback changes if any error occurs
+        flash('Failed to delete staff!', 'error')
+        return redirect(request.referrer)
+
+@app.route('/reset_password_staff/<int:staff_id>', methods=['POST'])
+def reset_password_staff(staff_id):
+    cursor = getCursor()
+    cursor.execute('SELECT staff_admin.staff_id, staff_admin.first_name, staff_admin.last_name, staff_admin.work_phone_num, staff_admin.hire_date, staff_admin.dept, user.user_id, user.username, user.password, user.email, user.role, user.status FROM staff_admin JOIN user ON staff_admin.user_id = user.user_id WHERE staff_admin.staff_id = %s', (staff_id,))
+    staff = cursor.fetchone()
+
+    try:
+        # set initial_password
+        initial_password = 'password123'
+
+        # hash initial_password
+        hashed_password = hashing.hash_value(initial_password, salt='8010')
+
+        # get id that relative to staff
+        user_id = staff[6]
+
+        # update password
+        cursor.execute('UPDATE user SET password = %s WHERE user_id = %s', (hashed_password, user_id))
+        connection.commit()
+
+        flash('Password reset successfully!', 'success')
+        
+        cursor.close()
+
+    except Exception as e:
+        connection.rollback()
+        flash('Failed to reset password!', 'error')
+
+    return redirect(url_for('admin_m_staff'))  # redirect to staff list
+
 @app.route('/admin/profile', methods=['GET', 'POST'])
 def admin_profile():
     # check if loggined
