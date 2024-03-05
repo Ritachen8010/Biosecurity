@@ -8,7 +8,7 @@ USE `ladybug`;
 
 -- show table
 DESCRIBE `agro`;
-delete from `user` where `user_id` = '29';
+delete from `staff_admin` where `staff_id` = '8';
 -- quarry 
 SELECT * FROM `user`;
 SELECT * FROM `agro`;

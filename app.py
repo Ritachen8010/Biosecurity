@@ -47,6 +47,8 @@ def agro_home():
         agro_info = cursor.fetchone()
         print("Agro Info:", agro_info)
 
+        cursor.close()
+
     return render_template('3_agro_home.html', agro=agro_info)
 
 @app.route('/agro/pest')
@@ -59,6 +61,8 @@ def agro_pest():
         agro_info = cursor.fetchone()
         print("Agro Info:", agro_info)
 
+        cursor.close()
+
     return render_template('3_agro_pest.html')
 
 @app.route('/agro/weed')
@@ -70,6 +74,8 @@ def agro_weed():
         cursor.execute('SELECT * FROM agro WHERE user_id = %s', (session['id'],))
         agro_info = cursor.fetchone()
         print("Agro Info:", agro_info)
+
+        cursor.close()
 
     return render_template('3_agro_weed.html')
 
@@ -156,6 +162,8 @@ def staff_home():
         cursor.execute('SELECT * FROM staff_admin WHERE user_id = %s', (session['id'],))
         staff_info = cursor.fetchone()
         print("staff Info:", staff_info)
+        
+        cursor.close()
 
     return render_template('4_staff_home.html', staff_info=staff_info)
 
@@ -178,6 +186,7 @@ def staff_view_agro():
         cursor.execute('SELECT * FROM staff_admin WHERE user_id = %s', (session['id'],))
         staff_info = cursor.fetchone()
         print("staff Info:", staff_info)
+        cursor.close()
 
         cursor.execute('''
             SELECT agro.agro_id, agro.first_name, agro.last_name, agro.address, 
@@ -186,6 +195,7 @@ def staff_view_agro():
             JOIN user ON agro.user_id = user.user_id
         ''')
         combined_list = cursor.fetchall()
+        cursor.close()
 
     return render_template('4_staff_view_agro.html', combined_list=combined_list, staff_info=staff_info)
 
@@ -250,7 +260,6 @@ def staff_profile():
             print("After commit")
             
             print("Updating user and staff table...")
-            
             # updated in session
             session['email'] = email
             print("New email:", email)
@@ -273,7 +282,9 @@ def admin_home():
         admin_info = cursor.fetchone()
         print("admin_info:", admin_info)
 
+    cursor.close() # close
     return render_template('5_admin_home.html', admin=admin_info)
+    
 
 @app.route('/admin/manage_bio')
 def admin_m_bio():
@@ -297,7 +308,9 @@ def admin_m_agro():
         ''')
         combined_list = cursor.fetchall()
 
-    return render_template('5_admin_manage_agro.html', combined_list=combined_list, admin=admin_info)   
+        cursor.close() # close
+
+        return render_template('5_admin_manage_agro.html', combined_list=combined_list, admin=admin_info) 
 
 @app.route('/admin/agronomists/update/<int:id>', methods=['GET', 'POST'])
 def update_agro(id):
@@ -321,6 +334,8 @@ def update_agro(id):
                         (email, status, agro_id))
 
         connection.commit()
+
+        flash('Updated successfully!', 'success')
 
         return redirect(url_for('admin_m_agro'))
     else:
@@ -371,7 +386,7 @@ def add_agro():
         # insert new user
         cursor.execute('INSERT INTO user (username, password, email, role, status) VALUES (%s, %s, %s, %s, %s)',
                (username, hashed_password, email, role, status))
-        user_id = cursor.lastrowid  # get new agro_id
+        user_id = cursor.lastrowid  # get new user_id
 
         # update agro.user id
         cursor.execute('UPDATE agro SET user_id = %s WHERE agro_id = %s', (user_id, agro_id))
@@ -379,6 +394,8 @@ def add_agro():
 
         # success flash message
         flash('Agro added successfully!', 'success')
+
+        cursor.close()
 
         return redirect(url_for('admin_m_agro'))
     else:
@@ -397,7 +414,11 @@ def delete_agro(agro_id):
         cursor.execute('DELETE FROM user WHERE user_id = %s', (agro[6],))
         connection.commit()
 
+
         flash('Agronomist deleted successfully!', 'success') # msg add when successed 
+
+        cursor.close()
+
         return redirect(url_for('admin_m_agro', agro=agro))  # redirect to agro list
     except Exception as e:
         connection.rollback()  # rollback changes if any error occurs
@@ -425,6 +446,9 @@ def reset_password(agro_id):
         connection.commit()
 
         flash('Password reset successfully!', 'success')
+        
+        cursor.close()
+
     except Exception as e:
         connection.rollback()
         flash('Failed to reset password!', 'error')
@@ -450,6 +474,8 @@ def admin_m_staff():
         ''')
         combined_list = cursor.fetchall()
         print(combined_list)
+
+        cursor.close()
 
     return render_template('5_admin_manage_staff.html', combined_list=combined_list, admin=admin_info)
 
@@ -477,6 +503,10 @@ def update_staff(id):
                         (email, role, status, staff_id))
 
         connection.commit()
+
+        flash('Updated successfully!', 'success')
+
+        cursor.close()
 
         return redirect(url_for('admin_m_staff'))
     else:
