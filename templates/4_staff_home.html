@@ -1,23 +1,22 @@
 {% extends "1_home.html" %}
 
-{% block title %}Staff Pest/Weed View - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
+{% block title %}Staff - Home - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
 
 {% block content %}
 
 <div class="p-5 bg-light text-black text-center">
-    <h1>Welcome, {{ staff_info[2] + ' ' + staff_info[3] }}! </h1>
+    <h1>Hello, {{ staff_info[2] + ' ' + staff_info[3] }}!</h1>
 </div>
-
-<!-- Staff should be able to manage their own profile (update personal information and change
-password), view Agronomists profiles and manage the guide (view, add, update and delete
-details and images – including selecting the primary image). -->
 
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
         <!-- Navi -->
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{{ url_for('staff_home') }}">Pest/Weed Edit</a>
+                <a class="nav-link active" aria-current="page" href="{{ url_for('staff_home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('staff_edit_bio') }}">Edit Pest/Weed</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('staff_view_agro') }}">View Agronomists Profile</a>
@@ -29,250 +28,36 @@ details and images – including selecting the primary image). -->
     </div>
 </nav>
 
-<div class="container-sm mb-2">
-    <!-- Search bar -->
-    <form class="d-flex mb-5">
-        <input class="form-control-sm me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success btn-sm" type="submit">Search</button>
-    </form>
-    
-    <h1>Pests</h1>
-    <!-- Row 1 -->
+<section class="container">
     <div class="row">
-        <div class="col-sm-3"> <!-- Add 4 col by dvi into 3  -->
-            <div class="card h-100">
-                <img class="card-img-top" src="{{ url_for('static', filename='1.jpg') }}" alt="Listronotus bonariensis">
+        <div class="col-md-4 mb-5 mt-5">
+            <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Listronotus bonariensis</h5>
-                    <p class="card-text">Argentine stem weevil adult</p>
-                    <a href="{{ url_for('weed_list') }}" class="btn btn-primary">View Pest</a>
+                    <h5 class="card-title">Recent Activities</h5>
+                    <p class="card-text">No activities.</p>
                 </div>
             </div>
         </div>
-
-        <div class="col-sm-3">
-            <div class="card h-100">
-                <img class="card-img-top" src="{{ url_for('static', filename='2.jpg') }}" alt="Prietocella barbara">
+        <div class="col-md-4 mb-5 mt-5">
+            <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Prietocella barbara</h5>
-                    <p class="card-text">Banded Conical Snail</p>
-                    <a href="{{ url_for('pest_list') }}" class="btn btn-primary">View Pest</a>
+                    <h5 class="card-title">Upcoming Events</h5>
+                    <p class="card-text">No upcoming events.</p>
                 </div>
             </div>
         </div>
-
-        <div class="col-sm-3">
-            <div class="card h-100;">
-                <img class="card-img-top" src="{{ url_for('static', filename='3_4.jpg') }}" alt="Heteronychus arator">
+        <div class="col-md-4 mb-5 mt-5">
+            <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Heteronychus arator</h5>
-                    <p class="card-text">Black beete adult</p>
-                    <a href="{{ url_for('pest_list') }}" class="btn btn-primary">View Pest</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="card h-100">
-                <img class="card-img-top" src="{{ url_for('static', filename='3_4.jpg') }}" alt="Heteronychus arator">
-                <div class="card-body">
-                    <h5 class="card-title">Heteronychus arator</h5>
-                    <p class="card-text">Black beetle larvae</p>
-                    <a href="{{ url_for('pest_list') }}" class="btn btn-primary">View Pest</a>
-                </div>
-            </div>
-        </div>
-
-    <!-- Row 2 -->
-    <div class="row mt-5"> <!-- mt-5 adds margin-top -->
-        <div class="col-sm-3">
-            <div class="card h-100">
-                <img class="card-img-top" src="{{ url_for('static', filename='5.jpg') }}" alt="Sminthurus viridis">
-                <div class="card-body">
-                    <h5 class="card-title">Sminthurus viridis</h5>
-                    <p class="text-truncate card-text">Clover fea, dover springtail, lucerne fea</p>
-                    <a href="{{ url_for('pest_list') }}" class="btn btn-primary">View Pest</a>
-                </div>
-            </div>
-        </div> 
-
-        <div class="col-sm-3">
-            <div class="card h-100">
-                <img class="card-img-top" src="{{ url_for('static', filename='6.jpg') }}" alt="Agrotis ipsilon">
-                <div class="card-body">
-                    <h5 class="card-title">Agrotis ipsilon</h5>
-                    <p class="card-text">Greasy cutworm</p>
-                    <a href="{{ url_for('pest_list') }}" class="btn btn-primary">View Pest</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="card h-100">
-                <img class="card-img-top" src="{{ url_for('static', filename='7.jpg') }}" alt="Pieris brassicae">
-                <div class="card-body">
-                    <h5 class="card-title">Pieris brassicae</h5>
-                    <p class="card-text">Great white butterfy</p>
-                    <a href="{{ url_for('pest_list') }}" class="btn btn-primary">View Pest</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="card h-100">
-                <img class="card-img-top img-fluid" src="{{ url_for('static', filename='8.jpg') }}" alt="Adoryphorus coulonii">
-                <div class="card-body">
-                    <h5 class="card-title">Adoryphorus coulonii</h5>
-                    <p class="card-text">Redheaded pasture cockchafer</p>
-                    <a href="{{ url_for('pest_list') }}" class="btn btn-primary">View Pest</a>
-                </div>
-            </div>
-        </div>
-
-    <!-- Row 3 -->
-    <div class="row mt-5"> <!-- mt-5 adds margin-top -->
-        <div class="col-sm-3">
-            <div class="card h-100">
-                <img class="card-img-top" src="{{ url_for('static', filename='9_10.jpg') }}" alt="Odontria striata (white)">
-                <div class="card-body">
-                    <h5 class="card-title">Odontria striata (White)</h5>
-                    <p class="card-text">Striped chafer adult</p>
-                    <a href="{{ url_for('pest_list') }}" class="btn btn-primary">View Pest</a>
-                </div>
-            </div>
-        </div> 
-
-        <div class="col-sm-3">
-            <div class="card h-100">
-                <img class="card-img-top" src="{{ url_for('static', filename='9_10.jpg') }}" alt="Odontria striata (White)">
-                <div class="card-body">
-                    <h5 class="card-title">Odontria striata (White)</h5>
-                    <p class="card-text">Striped chafer larvae</p>
-                    <a href="{{ url_for('pest_list') }}" class="btn btn-primary">View Pest</a>
-                </div>
-            </div>
-        </div>
-
-    <h1 class="mt-5">Weeds</h1>
-    <!-- Row 1 -->
-    <div class="row">
-        <div class="col-sm-3"> <!-- Add 4 col by dvi into 3  -->
-            <div class="card h-100">
-                <img class="card-img-top" src="{{ url_for('static', filename='11.jpg') }}" alt="Critesion spp">
-                <div class="card-body">
-                    <h5 class="card-title">Critesion spp</h5>
-                    <p class="card-text">Barley grass</p>
-                    <a href="{{ url_for('weed_list') }}" class="btn btn-primary">View Weed</a>
-                </div>
-            </div>
-        </div>
-    
-        <div class="col-sm-3">
-            <div class="card h-100">
-                <img class="card-img-top" src="{{ url_for('static', filename='12.jpg') }}" alt="Acaena novae-zelandiae, A. anserinifolia">
-                <div class="card-body">
-                    <h5 class="text-truncate card-title">Acaena novae-zelandiae, A. anserinifolia</h5>
-                    <p class="card-text">Bidibidi or piripiri</p>
-                    <a href="{{ url_for('pest_list') }}" class="btn btn-primary">View Weed</a>
-                </div>
-            </div>
-        </div>
-    
-        <div class="col-sm-3">
-            <div class="card h-100">
-                <img class="card-img-top" src="{{ url_for('static', filename='13.jpg') }}" alt="Cardamine hirsuta">
-                <div class="card-body">
-                    <h5 class="card-title">Cardamine hirsuta</h5>
-                    <p class="card-text">Bitter cress</p>
-                    <a href="{{ url_for('pest_list') }}" class="btn btn-primary">View Weed</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="card h-100">
-                <img class="card-img-top" src="{{ url_for('static', filename='14.jpg') }}" alt="Pteridium esculentum">
-                <div class="card-body">
-                    <h5 class="card-title">Bracken</h5>
-                    <p class="card-text">Black beete adult</p>
-                    <a href="{{ url_for('pest_list') }}" class="btn btn-primary">View Weed</a>
-                </div>
-            </div>
-        </div>
-
-    <!-- Row 2 -->
-    <div class="row mt-5"> <!-- mt-5 adds margin-top -->
-        <div class="col-sm-3">
-            <div class="card h-100">
-                <img class="card-img-top" src="{{ url_for('static', filename='15.jpg') }}" alt="Panicum miliaceum">
-                <div class="card-body">
-                    <h5 class="card-title">Panicum miliaceum</h5>
-                    <p class="card-text">Broom corn millet</p>
-                    <a href="{{ url_for('pest_list') }}" class="btn btn-primary">View Weed</a>
-                </div>
-            </div>
-        </div> 
-
-        <div class="col-sm-3">
-            <div class="card h-100">
-                <img class="card-img-top" src="{{ url_for('static', filename='16.jpg') }}" alt="Orobanche minor">
-                <div class="card-body">
-                    <h5 class="card-title">Orobanche minor</h5>
-                    <p class="card-text">Broomrape</p>
-                    <a href="{{ url_for('pest_list') }}" class="btn btn-primary">View Weed</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="card h-100">
-                <img class="card-img-top" src="{{ url_for('static', filename='17.jpg') }}" alt="Buddleja davidii">
-                <div class="card-body">
-                    <h5 class="card-title">Buddleja davidii</h5>
-                    <p class="card-text">Buddleia</p>
-                    <a href="{{ url_for('pest_list') }}" class="btn btn-primary">View Weed</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="card h-100">
-                <img class="card-img-top img-fluid" src="{{ url_for('static', filename='18.jpg') }}" alt="Arctium minus, A. lappa">
-                <div class="card-body">
-                    <h5 class="card-title">Arctium minus, A. lappa</h5>
-                    <p class="card-text">Burdock</p>
-                    <a href="{{ url_for('pest_list') }}" class="btn btn-primary">View Weed</a>
-                </div>
-            </div>
-        </div> 
-
-    <!-- Row 3 -->
-    <div class="row mt-5"> <!-- mt-5 adds margin-top -->
-        <div class="col-sm-3">
-            <div class="card h-100">
-                <img class="card-img-top" src="{{ url_for('static', filename='19.jpg') }}" alt="Stellaria media">
-                <div class="card-body">
-                    <h5 class="card-title">Stellaria media</h5>
-                    <p class="card-text">chickweed</p>
-                    <a href="{{ url_for('pest_list') }}" class="btn btn-primary">View Weed</a>
-                </div>
-            </div>
-        </div> 
-
-        <div class="col-sm-3">
-            <div class="card h-100">
-                <img class="card-img-top" src="{{ url_for('static', filename='20.jpg') }}" alt="Rorippa syivestris">
-                <div class="card-body">
-                    <h5 class="card-title">Rorippa syivestris</h5>
-                    <p class="card-text">Creeping yellow cress</p>
-                    <a href="{{ url_for('pest_list') }}" class="btn btn-primary">View Weed</a>
+                    <h5 class="card-title">Contact Information</h5>
+                    <p class="card-text text-truncate">IT support, please contact the support team at support@example.com.</p>
                 </div>
             </div>
         </div>
     </div>
-</div>        
+</section>
 
-        
-        
-
+<footer class="container-fluid p-5 bg-light text-black text-center fixed-bottom">
+    <h5>AGRICULTURAL | BIOSECURITY | PEST AND WEED</h5>
+    </footer>
 {% endblock %}

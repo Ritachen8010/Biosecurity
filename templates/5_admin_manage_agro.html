@@ -1,25 +1,25 @@
 {% extends "1_home.html" %}
 
-{% block title %}Administrator Edit Agronomist - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
+{% block title %}Administrator - View/Edit Agronomist - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
 
 {% block content %}
 
 <div class="p-5 bg-light text-black text-center">
+    <h1>Hello, {{ admin[2] + ' ' + admin[3] }}!</h1>
 </div>
-
 
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
         <!-- Navi -->
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3">
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('admin_home') }}">Edit Pest/Weed</a>
+                <a class="nav-link" href="{{ url_for('admin_home') }}">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{{ url_for('admin_m_agro') }}">Edit Agronomists Profile</a>
+                <a class="nav-link active" aria-current="page" href="{{ url_for('admin_m_agro') }}">View/Edit Agronomists Profile</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('admin_m_staff') }}">Edit Staff Profile</a>
+                <a class="nav-link" href="{{ url_for('admin_m_staff') }}">View/Edit Staff Profile</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('admin_profile') }}">Personal Profile</a>
@@ -28,12 +28,104 @@
     </div>
 </nav>
 
-<div class="container-sm mb-2">
+<div class="container-sm mb-5">
     <!-- Search bar -->
-    <form class="d-flex mb-5">
+    <form class="d-flex mb-3">
         <input class="form-control-sm me-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success btn-sm" type="submit">Search</button>
     </form>
+
+    <form action="{{ url_for('add_agro') }}" method="GET">
+        <button type="submit" class="btn btn-primary mb-5">Add Agronomist</button>
+    </form>
+
+    <h1>List of Agronomists</h1>
+    <table class="text-center mt-5 mx-auto w-80 table table-bordered">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Agronomist ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                <th>Date Joined</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Action</th>
+                <th>Delete</th>
+                <th>Password</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for agro in combined_list %}
+                <tr>
+                    <td>{{ agro[6] }}</td>
+                    <td>{{ agro[0] }}</td>
+                    <td>{{ agro[1] }}</td>
+                    <td>{{ agro[2] }}</td>
+                    <td>{{ agro[3] }}</td>
+                    <td>{{ agro[4] }}</td>
+                    <td>{{ agro[5] }}</td>
+                    <td>{{ agro[7] }}</td>
+                    <td>{{ agro[8] }}</td>
+                    <td>
+                        <form action="{{ url_for('update_agro', id=agro[0]) }}" method="GET">
+                            <button type="submit" class="btn btn-primary">Edit</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{{ url_for('delete_agro', agro_id=agro[0]) }}" method="POST">
+                            <input type="hidden" name="agro_id" value="{{ agro[0] }}">
+                            <button type="submit" class="btn btn-danger" onclick="confirmDelete({{ agro[0] }})">Delete</button>
+                        </form>                        
+                    </td>
+                    <td>
+                        <form action="{{ url_for('reset_password', agro_id=agro[0]) }}" method="POST">
+                            <button type="submit" class="btn btn-primary">Reset</button>
+                        </form>                        
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+</div>
+
+
+<script>
+    // confirmDelete for delete user
+    function confirmDelete(agroId) {
+        if (confirm('Are you sure you want to delete this agronomist?')) {
+            document.getElementById('deleteForm_' + agroId).submit();
+        }
+    }
+</script>
+
+
+<script>
+    // close flash msg when close button is clicked
+    document.querySelectorAll('.close').forEach(function(closeButton) {
+        closeButton.addEventListener('click', function() {
+            this.parentElement.style.display = 'none';
+        });
+    });
+</script>
+
+
+<footer class="mt-5 p-5 bg-light text-black text-center relative-position">
+    <h5>AGRICULTURAL | BIOSECURITY | PEST AND WEED</h5>
+</footer>
+
 
 
 {% endblock %}

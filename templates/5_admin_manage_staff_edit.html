@@ -1,0 +1,59 @@
+{% extends "1_home.html" %}
+
+{% block title %}Administrator - View/Edit Agronomist - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h2>Update Agronomist</h2>
+    <form action="{{ url_for('update_staff', id=staff[0]) }}" method="POST">
+            <input type="hidden" name="staff_id" value="{{ staff[0] }}">
+        <div class="mb-3">
+            <label for="first_name" class="form-label">First Name</label>
+            <input type="text" class="form-control" name="first_name" id="first_name" value="{{ staff[1] }}"
+            required pattern="[A-Za-z]+" title="Please enter characters only">
+        </div>
+        <div class="mb-3">
+            <label for="last_name" class="form-label">Last Name</label>
+            <input type="text" class="form-control" name="last_name" id="last_name" value="{{ staff[2] }}"
+            required pattern="[A-Za-z]+" title="Please enter characters only">
+        </div>
+        <div class="mb-3">
+            <label for="work_phone_num" class="form-label">Work Phone Number</label>
+            <input type="tel" class="form-control" name="work_phone_num" id="work_phone_num" value="{{ staff[3] }}" 
+            required pattern="\d{3}-\d{7,8}" title="Please enter your Phone Number, e.g., 123-4567890">
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" name="email" id="email" value="{{ staff[7] }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="role" class="form-label">Position</label>
+            <input type="text" class="form-control" name="role" id="role" value="{{ staff[8] }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="dept" class="form-label">Department</label>
+            <input type="text" class="form-control" name="dept" id="dept" value="{{ staff[5] }}" 
+            required title="e.g., DD-MM-YYYY">
+        </div>
+        <div class="mb-3">
+            <label for="hire_date" class="form-label">Hire Date</label>
+            <input type="date" class="form-control" name="hire_date" id="hire_date" value="{{ staff[4] }}" 
+            required title="e.g., MM-DD-YYYY">
+        </div>
+        <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select class="form-select" name="status" id="status" required>
+                <option value="active" {% if staff[9] == 'active' %} selected {% endif %}>Active</option>
+                <option value="inactive" {% if staff[9] == 'inactive' %} selected {% endif %}>Inactive</option>
+            </select>
+        </div>
+        
+        <div class="mt-5">
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a href="{{ url_for('admin_m_staff') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

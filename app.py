@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import flash
 from flask import render_template
 from flask import request
 from flask import redirect
@@ -38,7 +39,39 @@ def about_us():
 
 @app.route('/agro/home')
 def agro_home():
-    return render_template('3_agro_home.html')
+        # check if loggined
+    if 'loggedin' in session:
+        # login and fetch details
+        cursor = getCursor()
+        cursor.execute('SELECT * FROM agro WHERE user_id = %s', (session['id'],))
+        agro_info = cursor.fetchone()
+        print("Agro Info:", agro_info)
+
+    return render_template('3_agro_home.html', agro=agro_info)
+
+@app.route('/agro/pest')
+def agro_pest():
+        # check if loggined
+    if 'loggedin' in session:
+        # login and fetch details
+        cursor = getCursor()
+        cursor.execute('SELECT * FROM agro WHERE user_id = %s', (session['id'],))
+        agro_info = cursor.fetchone()
+        print("Agro Info:", agro_info)
+
+    return render_template('3_agro_pest.html')
+
+@app.route('/agro/weed')
+def agro_weed():
+        # check if loggined
+    if 'loggedin' in session:
+        # login and fetch details
+        cursor = getCursor()
+        cursor.execute('SELECT * FROM agro WHERE user_id = %s', (session['id'],))
+        agro_info = cursor.fetchone()
+        print("Agro Info:", agro_info)
+
+    return render_template('3_agro_weed.html')
 
 @app.route('/agro/profile', methods=['GET', 'POST'])
 def agro_profile():
@@ -126,6 +159,17 @@ def staff_home():
 
     return render_template('4_staff_home.html', staff_info=staff_info)
 
+@app.route('/staff/edit_bio')
+def staff_edit_bio():
+    if 'loggedin' in session:
+        # login and fetch details
+        cursor = getCursor()
+        cursor.execute('SELECT * FROM staff_admin WHERE user_id = %s', (session['id'],))
+        staff_info = cursor.fetchone()
+        print("staff Info:", staff_info)
+
+    return render_template('4_staff_edit_bio.html', staff_info=staff_info)
+
 @app.route('/staff/view_agro_profile')
 def staff_view_agro():
     if 'loggedin' in session:
@@ -135,10 +179,9 @@ def staff_view_agro():
         staff_info = cursor.fetchone()
         print("staff Info:", staff_info)
 
-
         cursor.execute('''
             SELECT agro.agro_id, agro.first_name, agro.last_name, agro.address, 
-                agro.phone_num, agro.date_joined, user.username, user.email, user.status
+            agro.phone_num, agro.date_joined, user.username, user.email, user.status
             FROM agro
             JOIN user ON agro.user_id = user.user_id
         ''')
@@ -146,7 +189,7 @@ def staff_view_agro():
 
     return render_template('4_staff_view_agro.html', combined_list=combined_list, staff_info=staff_info)
 
-@app.route('/staff/profile')
+@app.route('/staff/profile', methods=['GET', 'POST'])
 def staff_profile():
     # check if loggined
     if 'loggedin' in session:
@@ -222,21 +265,307 @@ def staff_profile():
 
 @app.route('/admin/home')
 def admin_home():
-    return render_template('5_admin_home.html')
+    # check if loggined
+    if 'loggedin' in session:
+        # login and fetch details
+        cursor = getCursor()
+        cursor.execute('SELECT * FROM staff_admin WHERE user_id = %s', (session['id'],))
+        admin_info = cursor.fetchone()
+        print("admin_info:", admin_info)
 
-@app.route('/admin/manage_agro')
+    return render_template('5_admin_home.html', admin=admin_info)
+
+@app.route('/admin/manage_bio')
+def admin_m_bio():
+    return render_template('5_admin_manage_bio.html')
+
+@app.route('/admin/manage_agro', methods=['GET', 'POST'])
 def admin_m_agro():
-    return render_template('5_admin_manage_agro.html')
+    if 'loggedin' in session:
+        # login and fetch details
+        cursor = getCursor()
+        cursor.execute('SELECT * FROM staff_admin WHERE user_id = %s', (session['id'],))
+        admin_info = cursor.fetchone()
+        print("admin_info:", admin_info)
+
+        # get agro info
+        cursor.execute('''
+            SELECT agro.agro_id, agro.first_name, agro.last_name, agro.address, 
+            agro.phone_num, agro.date_joined, user.username, user.email, user.status
+            FROM agro
+            JOIN user ON agro.user_id = user.user_id
+        ''')
+        combined_list = cursor.fetchall()
+
+    return render_template('5_admin_manage_agro.html', combined_list=combined_list, admin=admin_info)   
+
+@app.route('/admin/agronomists/update/<int:id>', methods=['GET', 'POST'])
+def update_agro(id):
+    cursor = getCursor()
+    if request.method == 'POST':
+        agro_id = request.form['agro_id']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        address = request.form['address']
+        phone_num = request.form['phone_num']
+        email = request.form['email']
+        status = request.form['status']
+        print("Form data:", request.form)
+
+        # updated date
+        cursor.execute('UPDATE agro SET first_name=%s, last_name=%s, address=%s, phone_num=%s WHERE agro_id=%s',
+                       (first_name, last_name, address, phone_num, agro_id))
+        print('UPDATE agro SET first_name=%s, last_name=%s, address=%s, phone_num=%s WHERE agro_id=%s'
+            % (first_name, last_name, address, phone_num, agro_id))
+        cursor.execute('UPDATE user SET email=%s, status=%s WHERE user_id=(SELECT user_id FROM agro WHERE agro_id=%s)',
+                        (email, status, agro_id))
+
+        connection.commit()
+
+        return redirect(url_for('admin_m_agro'))
+    else:
+        # get agro info
+        cursor.execute('''
+            SELECT agro.agro_id, agro.first_name, agro.last_name, agro.address, 
+            agro.phone_num, agro.date_joined, user.username, user.email, user.status
+            FROM agro
+            JOIN user ON agro.user_id = user.user_id
+            WHERE agro.agro_id = %s
+        ''', (id,))
+        agro = cursor.fetchone()
+
+        return render_template('5_admin_manage_agro_edit.html', agro=agro)
+
+@app.route('/add_agro', methods=['GET', 'POST'])
+def add_agro():
+    if request.method == 'POST':
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        address = request.form['address']
+        phone_num = request.form['phone_num']
+        date_joined = request.form['date_joined']
+        username = request.form['username']
+        password = request.form['password'] #raw password
+        email = request.form['email']
+        role = request.form['role']
+        status = request.form['status']
+        print("Form data:", request.form)
+
+        # Check if username already exists
+        cursor = getCursor()
+        cursor.execute('SELECT * FROM user WHERE username = %s', (username,))
+        existing_user = cursor.fetchone()
+        if existing_user:
+            msg = 'Account already exists!'
+            return render_template('5_admin_manage_add_agro.html', msg=msg)
+
+        # hash with salt
+        hashed_password = hashing.hash_value(password, salt='8010')
+
+        # insert new agro
+        cursor = getCursor()
+        cursor.execute('INSERT INTO agro (first_name, last_name, address, phone_num, date_joined) VALUES (%s, %s, %s, %s, %s)',
+               (first_name, last_name, address, phone_num, date_joined))
+        agro_id = cursor.lastrowid  # get new agro_id
+
+        # insert new user
+        cursor.execute('INSERT INTO user (username, password, email, role, status) VALUES (%s, %s, %s, %s, %s)',
+               (username, hashed_password, email, role, status))
+        user_id = cursor.lastrowid  # get new agro_id
+
+        # update agro.user id
+        cursor.execute('UPDATE agro SET user_id = %s WHERE agro_id = %s', (user_id, agro_id))
+        connection.commit()
+
+        # success flash message
+        flash('Agro added successfully!', 'success')
+
+        return redirect(url_for('admin_m_agro'))
+    else:
+        return render_template('5_admin_manage_add_agro.html')
+    
+@app.route('/delete_agro/<int:agro_id>', methods=['POST'])
+def delete_agro(agro_id):
+    cursor = getCursor()
+    cursor.execute('SELECT agro.agro_id, agro.first_name, agro.last_name, agro.address, agro.phone_num, agro.date_joined, user.user_id, user.username, user.password, user.email, user.role, user.status FROM agro JOIN user ON agro.user_id = user.user_id WHERE agro.agro_id = %s', (agro_id,))
+    agro = cursor.fetchone()
+
+    try:
+        # delete from agro
+        cursor.execute('DELETE FROM agro WHERE agro_id = %s', (agro_id,))
+        # delete from user
+        cursor.execute('DELETE FROM user WHERE user_id = %s', (agro[6],))
+        connection.commit()
+
+        flash('Agronomist deleted successfully!', 'success') # msg add when successed 
+        return redirect(url_for('admin_m_agro', agro=agro))  # redirect to agro list
+    except Exception as e:
+        connection.rollback()  # rollback changes if any error occurs
+        flash('Failed to delete agro!', 'error')
+        return redirect(request.referrer)
+
+@app.route('/reset_password/<int:agro_id>', methods=['POST'])
+def reset_password(agro_id):
+    cursor = getCursor()
+    cursor.execute('SELECT agro.agro_id, agro.first_name, agro.last_name, agro.address, agro.phone_num, agro.date_joined, user.user_id, user.username, user.password, user.email, user.role, user.status FROM agro JOIN user ON agro.user_id = user.user_id WHERE agro.agro_id = %s', (agro_id,))
+    agro = cursor.fetchone()
+
+    try:
+        # set initial_password
+        initial_password = 'password123'
+
+        # hash initial_password
+        hashed_password = hashing.hash_value(initial_password, salt='8010')
+
+        # get id that relative to agro
+        user_id = agro[6]
+
+        # update password
+        cursor.execute('UPDATE user SET password = %s WHERE user_id = %s', (hashed_password, user_id))
+        connection.commit()
+
+        flash('Password reset successfully!', 'success')
+    except Exception as e:
+        connection.rollback()
+        flash('Failed to reset password!', 'error')
+
+    return redirect(url_for('admin_m_agro'))  # redirect to agro list
 
 @app.route('/admin/manage_staff')
 def admin_m_staff():
-    return render_template('5_admin_manage_staff.html')
+    if 'loggedin' in session:
+        # login and fetch details
+        cursor = getCursor()
+        cursor.execute('SELECT * FROM staff_admin WHERE user_id = %s', (session['id'],))
+        admin_info = cursor.fetchone()
+        print("admin_info:", admin_info)
 
-@app.route('/admin/profile')
+        # get agro info
+        cursor.execute('''
+            SELECT staff_admin.staff_id, staff_admin.first_name, staff_admin.last_name,
+            staff_admin.work_phone_num, staff_admin.hire_date, staff_admin.dept,
+            user.username, user.email, user.role, user.status
+            FROM staff_admin
+            JOIN user ON staff_admin.user_id = user.user_id
+        ''')
+        combined_list = cursor.fetchall()
+        print(combined_list)
+
+    return render_template('5_admin_manage_staff.html', combined_list=combined_list, admin=admin_info)
+
+@app.route('/admin/staff/update/<int:id>', methods=['GET', 'POST'])
+def update_staff(id):
+    cursor = getCursor()
+    if request.method == 'POST':
+        staff_id = request.form['staff_id']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        work_phone_num = request.form['work_phone_num']
+        hire_date = request.form['hire_date']
+        dept = request.form['dept']
+        email = request.form['email']
+        role = request.form['role']
+        status = request.form['status']
+        print("Form data:", request.form)
+
+        # updated date
+        cursor.execute('UPDATE staff_admin SET first_name=%s, last_name=%s, work_phone_num=%s, hire_date=%s, dept=%s WHERE staff_id=%s',
+                       (first_name, last_name, work_phone_num, hire_date, dept, staff_id))
+        print('UPDATE staff_admin SET first_name=%s, last_name=%s, work_phone_num=%s, hire_date=%s, dept=%s, WHERE staff_id=%s'
+            % (first_name, last_name, work_phone_num, hire_date, dept, staff_id))
+        cursor.execute('UPDATE user SET email=%s, role=%s, status=%s WHERE user_id=(SELECT user_id FROM staff_admin WHERE staff_id=%s)',
+                        (email, role, status, staff_id))
+
+        connection.commit()
+
+        return redirect(url_for('admin_m_staff'))
+    else:
+        # get agro info
+        cursor.execute('''
+            SELECT staff_admin.staff_id, staff_admin.first_name, staff_admin.last_name,
+            staff_admin.work_phone_num, staff_admin.hire_date, staff_admin.dept,
+            user.username, user.email, user.role, user.status
+            FROM staff_admin
+            JOIN user ON staff_admin.user_id = user.user_id
+            WHERE staff_admin.staff_id = %s
+        ''', (id,))
+        staff = cursor.fetchone()
+
+        return render_template('5_admin_manage_staff_edit.html', staff=staff)
+
+@app.route('/admin/profile', methods=['GET', 'POST'])
 def admin_profile():
-    return render_template('5_admin_profile.html')
+    # check if loggined
+    if 'loggedin' in session:
+        # login and fetch details
+        cursor = getCursor()
+        cursor.execute('SELECT * FROM staff_admin WHERE user_id = %s', (session['id'],))
+        admin_info = cursor.fetchone()
+        print("admin_info:", admin_info)
+
+        if request.method == 'POST':
+            first_name = request.form['first_name']
+            last_name = request.form['last_name']
+            phone_num = request.form['phone_num']
+            email = request.form['email']
+            current_password = request.form['currentPassword']
+            new_password = request.form['newPassword']
+            confirm_password = request.form['confirmPassword']
+            print("Form Data - First Name:", first_name)
+            print("Form Data - Last Name:", last_name)
+            print("Form Data - Phone Number:", phone_num)
+            print("Form Data - Email:", email)
+            print("Form Data - Current Password:", current_password)
+            print("Form Data - New Password:", new_password)
+            print("Form Data - Confirm Password:", confirm_password)
 
 
+            # verify password
+            cursor.execute('SELECT password FROM user WHERE user_id = %s', (session['id'],))
+            stored_password = cursor.fetchone()[0]
+            if not hashing.check_value(stored_password, current_password, salt='8010'):
+                # if password incorect
+                return render_template('5_admin_profile.html', 
+                                       msg='Current password is incorrect.', 
+                                       msg_type='error',
+                                       admin=admin_info)
+
+            # check old password and new password
+            if new_password and confirm_password:
+                if new_password != confirm_password:
+                    return render_template('5_admin_profile.html', 
+                                           msg='New password and confirm password do not match.', 
+                                           msg_type='error',
+                                           admin=admin_info)
+                hashed_new_password = hashing.hash_value(new_password, salt='8010')
+                # update password
+                cursor.execute('UPDATE user SET password=%s WHERE user_id=%s', (hashed_new_password, session['id']))
+
+
+            # update other user information
+            cursor.execute('UPDATE staff_admin SET first_name=%s, last_name=%s, address=%s, phone_num=%s WHERE user_id=%s',
+                           (first_name, last_name, phone_num, session['id']))
+            print('UPDATE staff_admin SET first_name=%s, last_name=%s, address=%s, phone_num=%s WHERE user_id=%s' % 
+                  (first_name, last_name, phone_num, session['id']))
+            cursor.execute('UPDATE user SET email=%s WHERE user_id=%s', (email, session['id']))
+            print('UPDATE user SET email=%s WHERE user_id=%s' % (email, session['id']))
+            print("Before commit")
+            connection.commit()
+            print("After commit")
+            
+            print("Updating user and staff table...")
+            
+            # updated in session
+            session['email'] = email
+            print("New email:", email)
+            
+            return render_template('5_admin_profile', 
+                                   msg='Profile updated successfully.', 
+                                   msg_type='success',
+                                   admin=admin_info)
+
+        return render_template('5_admin_profile.html', admin=admin_info)
+    return redirect(url_for('login'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -301,7 +630,7 @@ def login():
 
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         username = request.form['username']
-        input_password = request.form['password']  # Use a different variable name to avoid confusion
+        input_password = request.form['password'] 
         
         # Get user data from MySQL
         cursor = getCursor()
@@ -314,45 +643,55 @@ def login():
             # Check if the hashed input password matches the stored hashed password
             if hashing.check_value(stored_password, input_password, salt='8010'):
                 print("Password verification succeeded.")
-                session['loggedin'] = True
-                session['id'] = user[0]
-                session['username'] = user[1]
-                session['email'] = user[3]
-                session['role'] = user[4]
-                session['status'] = user[5]
 
-                # Redirect to a different dashboard based on the user's role
-                if user[4] == 'agronomist':
-                    return redirect(url_for('agro_home'))
-                elif user[4] == 'staff':
-                    return redirect(url_for('staff_home'))
-                elif user[4] == 'admin':
-                    return redirect(url_for('admin_home'))
+                # Check if the user's status is active
+                if user[5] == 'active':
+                    session['loggedin'] = True
+                    session['id'] = user[0]
+                    session['username'] = user[1]
+                    session['email'] = user[3]
+                    session['role'] = user[4]
+                    session['status'] = user[5]
+
+                    # Redirect to a different dashboard based on the user's role
+                    if user[4] == 'agronomist':
+                        return redirect(url_for('agro_home'))
+                    elif user[4] == 'staff':
+                        return redirect(url_for('staff_home'))
+                    elif user[4] == 'admin':
+                        return redirect(url_for('admin_home'))
+                    else:
+                        return redirect(url_for('home'))
                 else:
-                    return redirect(url_for('home'))
+                    msg = 'Your account is inactive.'
             else:
-                # If the password is incorrect, update the message
                 msg = 'Incorrect password!'
         else:
-            # If the account doesn't exist or the username is incorrect, update the message
             msg = 'Incorrect username or account does not exist.'
 
-    # Show the login form with the message (if any)
     return render_template('7_login.html', msg=msg)
 
 @app.route('/weed_list')
-def weed_list():
-    return render_template('9_weed_list.html')
+def weed_list1():
+    cursor = getCursor()
+    cursor.execute('SELECT * FROM guide_info WHERE guide_id = %s', (guide_id,))
+    guide_id = cursor.fetchone()
+    print("admin_info:", guide_id)
+
+    return render_template('9_weed_list-1.html')
 
 @app.route('/pest_list')
-def pest_list():
-    return render_template('10_pest_list.html')
+def pest_list1():
+    cursor = getCursor()
+    cursor.execute("SELECT * FROM guide_info")
+    pest_guide = cursor.fetchall()
+    print("admin_info:", pest_guide)
+
+    return render_template('10_pest_list-1.html', pest=pest_guide)
 
 @app.route('/logout')
 def logout():
     # Remove session data, this will log the user out
-   session.pop('loggedin', None)
-   session.pop('id', None)
-   session.pop('username', None)
-   # Redirect to login page
-   return redirect(url_for('login'))
+    session.clear()
+    # Redirect to login page
+    return redirect(url_for('login'))

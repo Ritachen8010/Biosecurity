@@ -1,11 +1,11 @@
 {% extends "1_home.html" %}
 
-{% block title %}Profile - Agronomists - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
+{% block title %}Agronomists - Profile - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
 
 {% block content %}
 
 <div class="p-5 bg-light text-black text-center">
-    <h1>Welcome, {{ agro[2] + ' ' + agro[3] }}!</h1>
+    <h1>Hello, {{ agro[2] + ' ' + agro[3] }}!</h1>
     <p>Agronomist ID: {{ agro[0] }}</p>
     <p>Username: {{ session ['username'] }}</p>
     <p>Date of Join: {{ agro[6] }}</p>
@@ -18,10 +18,16 @@
         <!-- Navi -->
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3">
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('agro_home') }}">Pest/Weed Edit</a>
+                <a class="nav-link" href="{{ url_for('agro_home') }}">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{{ url_for('agro_profile') }}">Personal Profile</a>
+                <a class="nav-link" href="{{ url_for('agro_pest') }}">Pests</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('agro_weed') }}">Weeds</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link  active" aria-current="page" href="{{ url_for('agro_profile') }}">Profile</a>
             </li>
         </ul>
     </div>

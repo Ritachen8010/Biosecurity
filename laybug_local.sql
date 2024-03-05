@@ -8,7 +8,7 @@ USE `ladybug`;
 
 -- show table
 DESCRIBE `agro`;
-
+delete from `user` where `user_id` = '29';
 -- quarry 
 SELECT * FROM `user`;
 SELECT * FROM `agro`;
@@ -17,7 +17,7 @@ SELECT * FROM `guide_info`;
 SELECT * FROM `image`;
 
 SELECT * FROM `laybug` WHERE `username` = `%s`;
-
+delete from `agro` where `agro_id` = 8;
 -- create user table - manager user
 CREATE TABLE `user`(
 	`user_id` INT AUTO_INCREMENT,
@@ -84,12 +84,12 @@ CREATE TABLE `staff_admin`(
 );
 
 -- insert data - staff_admin
-INSERT INTO `staff_admin` (`user_id`, `first_name`, `last_name`, `work_phone_num`, `hire_date`, `pos`, `dept`, `status`)
+INSERT INTO `staff_admin` (`user_id`, `first_name`, `last_name`, `work_phone_num`, `hire_date`, `dept`)
 VALUES
-(1, 'Rita', 'Chen', '021-65432109', '2020-08-10', 'admin', 'Management', 'active'),
-(2, 'Lyn', 'Jin', '021-76998035', '2010-04-10', 'staff', 'Management', 'active'),
-(3, 'Lana', 'Su', '021-76774356', '2023-07-10', 'staff', 'IT', 'active'),
-(4, 'Fye', 'Xiang', '021-12338857', '2015-06-10', 'staff', 'IT', 'active');
+(1, 'Rita', 'Chen', '021-65432109', '2020-08-10',  'Management'),
+(2, 'Lyn', 'Jin', '021-76998035', '2010-04-10', 'Management'),
+(3, 'Lana', 'Su', '021-76774356', '2023-07-10', 'IT'),
+(4, 'Fye', 'Xiang', '021-12338857', '2015-06-10', 'IT');
 
 -- create guide table
 CREATE TABLE `guide_info`(

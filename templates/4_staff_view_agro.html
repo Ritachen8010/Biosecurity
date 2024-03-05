@@ -1,11 +1,11 @@
 {% extends "1_home.html" %}
 
-{% block title %}View Agronomists List - Staff - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
+{% block title %}Staff - View Agronomists List -  | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
 
 {% block content %}
 
 <div class="p-5 bg-light text-black text-center">
-    <h1>Welcome, {{ staff_info[2] + ' ' + staff_info[3] }}! </h1>
+    <h1>Hello, {{ staff_info[2] + ' ' + staff_info[3] }}! </h1>
 </div>
 
 <nav class="navbar navbar-expand-lg navbar-light">
@@ -13,7 +13,10 @@
         <!-- Navi -->
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3">
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('staff_home') }}">Pest/Weed Edit</a>
+                <a class="nav-link" href="{{ url_for('staff_home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('staff_edit_bio') }}">Edit Pest/Weed</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{{ url_for('staff_view_agro') }}">View Agronomists Profile</a>
@@ -24,6 +27,7 @@
         </ul>
     </div>
 </nav>
+
 
 <table class="text-center mt-5 mx-auto w-75 table table-bordered">
     <h1 class="text-center mt-5">List of Agronomists</h1>

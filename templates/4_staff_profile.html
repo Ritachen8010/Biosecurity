@@ -1,27 +1,28 @@
 {% extends "1_home.html" %}
 
-{% block title %}Profile - Agronomists - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
+{% block title %}Staff - View Agronomists Profile -  | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
 
 {% block content %}
 
 <div class="p-5 bg-light text-black text-center">
-    <h1>Welcome, {{ staff[2] + ' ' + staff[3] }}!</h1>
+    <h1>Hello, {{ staff[2] + ' ' + staff[3] }}!</h1>
     <p>Staff ID: {{ staff[0] }}</p>
     <p>Username: {{ session ['username'] }}</p>
-    <p>Position: {{ staff[6] }}</p>
-    <p>Department: {{ staff[7] }}</p>
+    <p>Position: {{ session['role'] }}</p>
+    <p>Department: {{ staff[6] }}</p>
     <p>Hire Date: {{ staff[5] }}</p>
     <p>Status: {{ session['status'] }}</p>
 </div>
-
-
 
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
         <!-- Navi -->
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3">
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('staff_home') }}">Pest/Weed Edit</a>
+                <a class="nav-link" href="{{ url_for('staff_home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('staff_edit_bio') }}">Edit Pest/Weed</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('staff_view_agro') }}">View Agronomists Profile</a>

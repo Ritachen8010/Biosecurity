@@ -1,10 +1,11 @@
 {% extends "1_home.html" %}
 
-{% block title %}Administrator Pest/Weed View & Edit - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
+{% block title %}Administrator - Pest/Weed View & Edit - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
 
 {% block content %}
 
 <div class="p-5 bg-light text-black text-center">
+    <h1>Hello, {{ admin[2] + ' ' + admin[3] }}!</h1>
 </div>
 
 <nav class="navbar navbar-expand-lg navbar-light">
@@ -12,13 +13,13 @@
         <!-- Navi -->
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{{ url_for('admin_home') }}">Edit Pest/Weed</a>
+                <a class="nav-link active" aria-current="page" href="{{ url_for('admin_home') }}">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('admin_m_agro') }}">Edit Agronomists Profile</a>
+                <a class="nav-link" href="{{ url_for('admin_m_agro') }}">View/Edit Agronomists Profile</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('admin_m_staff') }}">Edit Staff Profile</a>
+                <a class="nav-link" href="{{ url_for('admin_m_staff') }}">View/Edit Staff Profile</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('admin_profile') }}">Personal Profile</a>
@@ -27,11 +28,36 @@
     </div>
 </nav>
 
-<div class="container-sm mb-2">
-    <!-- Search bar -->
-    <form class="d-flex mb-5">
-        <input class="form-control-sm me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success btn-sm" type="submit">Search</button>
-    </form>
+<section class="container">
+    <div class="row">
+        <div class="col-md-4 mb-5 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Recent Activities</h5>
+                    <p class="card-text">No activities.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-5 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Upcoming Events</h5>
+                    <p class="card-text">No upcoming events.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-5 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Contact Information</h5>
+                    <p class="card-text text-truncate">IT support, please contact the support team at support@example.com.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
+<footer class="container-fluid p-5 bg-light text-black text-center fixed-bottom">
+    <h5>AGRICULTURAL | BIOSECURITY | PEST AND WEED</h5>
+    </footer>
 {% endblock %}
