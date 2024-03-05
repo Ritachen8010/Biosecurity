@@ -584,6 +584,7 @@ def delete_staff(staff_id):
         cursor.execute('DELETE FROM staff_admin WHERE staff_id = %s', (staff_id,))
         # delete from user
         cursor.execute('DELETE FROM user WHERE user_id = %s', (staff[6],))
+        print("Deleting staff with ID:", staff_id)
         connection.commit()
 
 
