@@ -1,0 +1,102 @@
+{% extends "1_home.html" %}
+
+{% block title %}Administrator - Edit Species - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
+
+{% block content %}
+
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+        <!-- Navigation Links -->
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin_home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ url_for('admin_view_guides') }}">View/Edit Guides</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin_m_agro') }}">View/Edit Agronomists Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin_m_staff') }}">View/Edit Staff Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin_profile') }}">Personal Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <h2>Edit Species</h2>
+    {% if msg %}
+        <div class="alert alert-success" role="alert">
+            {{ msg }}
+        </div>
+    {% endif %}
+    <form action="{{ url_for('staff_edit_guide', guide_id=guide[0]) }}" method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="item_type">Item Type</label>
+            <select class="form-control" id="item_type" name="item_type" required>
+                <option value="pest" {% if guide[1] == 'pest' %}selected{% endif %}>Pest</option>
+                <option value="weed" {% if guide[1] == 'weed' %}selected{% endif %}>Weed</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ guide[2] }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="common_name">Common Name</label>
+            <input type="text" class="form-control" id="common_name" name="common_name" value="{{ guide[3] }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="key_char">Key Characteristics</label>
+            <textarea class="form-control" id="key_char" name="key_char" required>{{ guide[4] }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="bio">Bio</label>
+            <textarea class="form-control" id="bio" name="bio" placeholder="Enter the biological information" required>{{ guide[5] }}</textarea>
+            <small class="form-text text-muted">Provide details about the species' biology.</small>
+        </div>
+        <div class="mb-3">
+            <label for="impact">Impact</label>
+            <textarea class="form-control" id="impact" name="impact" required>{{ guide[6] }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="control">Control</label>
+            <textarea class="form-control" id="control" name="control" required>{{ guide[7] }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="further_info">Further Info</label>
+            <textarea class="form-control" id="further_info" name="further_info" required>{{ guide[8] }}</textarea>
+        </div>        
+        <div class="mb-3">
+            <label for="image">Upload Image:</label>
+            <input type="file" id="image" name="image"><br>
+        </div>
+        <div class="mb-3">
+            <label for="image_file">Existing Image</label><br>
+            {% if guide[9] %}
+                <img src="{{ url_for('static', filename=guide[9]) }}" alt="Species Image" class="img-fluid"><br>
+            {% else %}
+                <p>No image available</p>
+            {% endif %}
+        </div>       
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="is_primary" name="is_primary" {% if guide[10] %}checked{% endif %}>
+            <label class="form-check-label" for="is_primary">Primary Image</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="{{ url_for('staff_view_guides') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<footer class="container-fluid p-5 bg-light text-black text-center mt-5">
+    <h5>AGRICULTURAL | BIOSECURITY | PEST AND WEED</h5>
+</footer>
+
+{% endblock %}

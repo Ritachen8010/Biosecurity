@@ -1,0 +1,57 @@
+{% extends "1_home.html" %}
+
+{% block title %}Agronomists - Pest - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
+
+{% block content %}
+
+<div class="p-5 bg-light text-black text-center">
+    <h1>Welcome to our Tool</h1>
+    <p>Please explore weeds/pests by clicking the list below.</p> 
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+        <!-- Navi -->
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3">
+            <li class="nav-item">
+                <a class="nav-link " href="{{ url_for('agro_home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ url_for('pest_list') }}">Pests</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('weed_list') }}">Weeds</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('agro_profile') }}">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container-sm mb-2">
+    <h1>Pest List</h1>
+    <div class="row">
+        {% for item in pest_list %}
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="{{ url_for('static', filename=item[3]) }}" class="card-img-top" alt="{{ item['2'] }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item[1] }}</h5>
+                    <p class="card-text text-truncate">Common Name: {{ item[2] }}</p>
+                    <p class="card-text">Guide ID: {{ item[0] }}</p>
+                    <a href="{{ url_for('guide_info', item_type='pest', guide_id=item[0]) }}" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<footer class="container-fluid p-5 bg-light text-black text-center">
+    <h5>AGRICULTURAL | BIOSECURITY | <a href="https://agpest.co.nz/">PEST</a> AND <a href="https://agpest.co.nz/">WEED</a></h5>
+</footer>
+{% endblock %}

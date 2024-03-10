@@ -24,17 +24,14 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('admin_profile') }}">Personal Profile</a>
             </li>
+                        <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
+            </li>
         </ul>
     </div>
 </nav>
 
 <div class="container-sm mb-2">
-    <!-- Search bar -->
-    <form class="d-flex mb-5">
-        <input class="form-control-sm me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success btn-sm" type="submit">Search</button>
-    </form>
-
     <form action="{{ url_for('add_staff') }}" method="GET">
         <button type="submit" class="btn btn-primary mb-5">Add Staff</button>
     </form>

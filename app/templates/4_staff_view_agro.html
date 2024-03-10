@@ -16,13 +16,16 @@
                 <a class="nav-link" href="{{ url_for('staff_home') }}">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('staff_edit_bio') }}">Edit Pest/Weed</a>
+                <a class="nav-link" href="{{ url_for('staff_view_guide') }}">Edit Pest/Weed</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{{ url_for('staff_view_agro') }}">View Agronomists Profile</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('staff_profile') }}">Personal Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
             </li>
         </ul>
     </div>

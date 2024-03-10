@@ -1,11 +1,11 @@
 {% extends "1_home.html" %}
 
-{% block title %}Administrator - Pest/Weed View & Edit - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
+{% block title %}Staff - Home - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
 
 {% block content %}
 
 <div class="p-5 bg-light text-black text-center">
-    <h1>Hello, {{ admin[2] + ' ' + admin[3] }}!</h1>
+    <h1>Hello, {{ staff_info[2] + ' ' + staff_info[3] }}!</h1>
 </div>
 
 <nav class="navbar navbar-expand-lg navbar-light">
@@ -13,16 +13,19 @@
         <!-- Navi -->
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{{ url_for('admin_home') }}">Home</a>
+                <a class="nav-link active" aria-current="page" href="{{ url_for('staff_home') }}">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('admin_m_agro') }}">View/Edit Agronomists Profile</a>
+                <a class="nav-link" href="{{ url_for('staff_view_guide') }}">Edit Pest/Weed</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('admin_m_staff') }}">View/Edit Staff Profile</a>
+                <a class="nav-link" href="{{ url_for('staff_view_agro') }}">View Agronomists Profile</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('admin_profile') }}">Personal Profile</a>
+                <a class="nav-link" href="{{ url_for('staff_profile') }}">Personal Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
             </li>
         </ul>
     </div>

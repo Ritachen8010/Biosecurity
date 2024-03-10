@@ -31,12 +31,15 @@
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{{ url_for('admin_profile') }}">Personal Profile</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
+            </li>
         </ul>
     </div>
 </nav>
 
 <div class="container mt-5">
-    <form action="{{ url_for('admin_m_agro') }}" method="post">
+    <form action="{{ url_for('admin_profile') }}" method="post">
         <div class="mb-3">
             <label for="frist_name" class="form-label">First Name</label>
             <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First Name" value="{{ admin[2] }}"  
@@ -50,11 +53,11 @@
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{ session['email'] }}" 
-            required title="Please enter your address" >
+            required title="Please enter your Email" >
         </div>
         <div class="mb-3">
-            <label for="phone" class="form-label">Phone Number</label>
-            <input type="tel" class="form-control" id="phone" name="phone_num" placeholder="Phone Number" value="{{ admin[4] }}" 
+            <label for="work_phone_num" class="form-label">Phone Number</label>
+            <input type="tel" class="form-control" id="work_phone_num" name="work_phone_num" placeholder="021-xxxxxxxx" value="{{ admin[4] }}" 
             required pattern="\d{3}-\d{7,8}" title="Please enter your Phone Number, e.g., 123-4567890">
         </div>
         <div class="mb-4">

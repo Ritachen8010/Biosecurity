@@ -28,7 +28,7 @@
 					<i class="fas fa-user"></i>
 				</label>
 				<input type="text" name="username" placeholder="Username" id="username" 
-				required pattern="(?=.*[A-Za-z])(?=.*\d)"  title="Please enter characters with number, e.g, lili23">
+				required pattern="^[A-Za-z0-9]+$" title="Please enter characters with number, e.g, lili123">
 
 				<label for="address">
 					<i class="fas fa-user"></i>
@@ -39,7 +39,7 @@
 				<label for="phone_number">
 					<i class="fas fa-user"></i>
 				</label>
-    			<input type="text" name="phone_number" placeholder="Phone Number" id="phone_number" 
+    			<input type="text" name="phone_number" placeholder="021-xxxxxxxx" id="phone_number" 
 				required pattern="\d{3}-\d{7,8}" title="Please enter your Phone Number, e.g., 123-4567890">
 				
 				<label for="password">

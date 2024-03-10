@@ -1,0 +1,91 @@
+{% extends "1_home.html" %}
+
+{% block title %}Staff - Add Species - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
+
+{% block content %}
+
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+        <!-- Navi -->
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('staff_home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ url_for('staff_view_guide') }}">View/Edit Pest/Weed</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('staff_view_agro') }}">View Agronomists Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('staff_profile') }}">Personal Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <h2>Edit Species</h2>
+    {% if msg %}
+        <div class="alert alert-danger" role="alert">
+            {{ msg }}
+        </div>
+    {% endif %}
+    <form action="{{ url_for('staff_edit_guide', guide_id=guide[0]) }}" method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="item_type">Item Type</label>
+            <select class="form-control" id="item_type" name="item_type" required>
+                <option value="pest">Pest</option>
+                <option value="weed">Weed</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="common_name">Common Name</label>
+            <input type="text" class="form-control" id="common_name" name="common_name" required>
+        </div>
+        <div class="mb-3">
+            <label for="key_char">Key Characteristics</label>
+            <textarea class="form-control" id="key_char" name="key_char" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="bio">Bio</label>
+            <textarea class="form-control" id="bio" name="bio" placeholder="Enter the biological information" required></textarea>
+            <small class="form-text text-muted">Provide details about the species' biology.</small>
+        </div>
+        <div class="mb-3">
+            <label for="impact">Impact</label>
+            <textarea class="form-control" id="impact" name="impact" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="control">Control</label>
+            <textarea class="form-control" id="control" name="control" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="further_info">Further Info</label>
+            <textarea class="form-control" id="further_info" name="further_info" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="image">Image</label>
+            <input type="file" name="image" id="image" required>
+        </div>        
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="is_primary" name="is_primary">
+            <label class="form-check-label" for="is_primary">Is Primary</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a href="{{ url_for('staff_view_guide') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<footer class="container-fluid p-5 bg-light text-black text-center mt-5">
+    <h5>AGRICULTURAL | BIOSECURITY | PEST AND WEED</h5>
+</footer>
+
+{% endblock %}

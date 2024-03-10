@@ -1,0 +1,78 @@
+{% extends "1_home.html" %}
+
+{% block title %}Administrator - Guide Review - | AGRICULTURAL | BIOSECURITY | PEST AND WEED{% endblock %}
+
+{% block body_class %}about-us{% endblock %}
+
+{% block content %}
+
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+        <!-- Navigation Links -->
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin_home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ url_for('admin_view_guides') }}">View/Edit Guides</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin_m_agro') }}">View/Edit Agronomists Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin_m_staff') }}">View/Edit Staff Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin_profile') }}">Personal Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <h1>{{ item_info[2] }}</h1>
+    <h5>{{ item_info[3] }}</h5>
+    {% if item_info[9] %}
+        <div>
+            <img src="{{ url_for('static', filename=item_info[9]) }}" alt="{{ item_info[2] + ' ' + item_info[3] }}" 
+            {% if is_primary %}
+                style="max-width: 800px; max-height: 800px;"
+            {% else %}
+                style="max-width: 300px; max-height: 300px;"
+            {% endif %}>
+        </div>
+    {% endif %}
+        <p><strong>Guide ID:</strong> {{ item_info[0] }}</p>
+        <p><strong>Item Type:</strong> {{ item_info[1] }}</p>
+        <p><strong>Scientific Name:</strong> {{ item_info[2] }}</p>
+        <p><strong>Common Name:</strong> {{ item_info[3] }}</p>
+        <p><strong>Key Characters:</strong></p>
+        {% for point in item_info[4].split('\n') %}
+            <p>{{ point }}</p>
+        {% endfor %}
+        <p><strong>Bio:</strong></p>
+        {% for point in item_info[5].split('\n') %}
+            <p>{{ point }}</p>
+        {% endfor %}
+        <p><strong>Impact:</strong></p>
+        {% for point in item_info[6].split('\n') %}
+            <p>{{ point }}</p>
+        {% endfor %}
+        <p><strong>Control:</strong></p>
+        {% for point in item_info[7].split('\n') %}
+            <p>{{ point }}</p>
+        {% endfor %}
+        <p><strong>Further Information:</strong></p>
+        {% for point in item_info[8].split('\n') %}
+            <p>{{ point }}</p>
+        {% endfor %}
+    </div>
+</div>
+
+<footer class="container-fluid p-5 bg-light text-black text-center">
+    <h5>AGRICULTURAL | BIOSECURITY | <a href="https://agpest.co.nz/">PEST</a> AND <a href="https://agpest.co.nz/">WEED</a></h5>
+</footer>
+{% endblock %}

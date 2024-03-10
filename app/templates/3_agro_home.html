@@ -17,13 +17,16 @@
                 <a class="nav-link active" aria-current="page" href="{{ url_for('agro_home') }}">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('agro_pest') }}">Pests</a>
+                <a class="nav-link" href="{{ url_for('pest_list') }}">Pests</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('agro_weed') }}">Weeds</a>
+                <a class="nav-link" href="{{ url_for('weed_list') }}">Weeds</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('agro_profile') }}">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
             </li>
         </ul>
     </div>
