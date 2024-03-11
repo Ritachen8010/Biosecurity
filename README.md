@@ -41,6 +41,7 @@
   
 2. The web through 'POST' and 'GET' to fetches and displays the details to send the request to update the database. 
 3. Use different HTML to redirect to different page. 
+4. When login the web can lead user to different types of dashboard by adding a role determine, as the web only allow agronomists to register. staff require admin to add the system.
 
 ## Getting Started
 - Please read requirment.txt to install.
@@ -53,7 +54,7 @@
 - Therefore, the main color is green and provide relate support tools for user eg, met service and information of weeds and pests. 
 
 ## Database design
-- The database I have design that is put comonly value together, eg: Agronomists, Staff and Admin they both need name, email, role and status. Therefore, I can put these value into one table and create tables based on different role or function. 
+- The database I have design that is put comonly value together, eg: agronomists, staff and admin they both need name, email, role and status. Therefore, I can put these value into one table and create tables based on different role or function. 
 
 - user (stored account and details)
 - agronomists (stored agronomists value)
