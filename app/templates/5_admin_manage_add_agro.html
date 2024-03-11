@@ -31,15 +31,12 @@
 </nav>
 
 <!-- msg -->
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
+<div class="container">
+    {% if msg %}
+        <div class="alert alert-{{ msg_type }}">
+            {{ msg }}
+        </div>
+    {% endif %}
 
 <div class="container mt-5">
     <h2>Add Agronomist</h2>

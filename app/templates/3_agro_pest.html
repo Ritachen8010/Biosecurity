@@ -38,7 +38,7 @@
         {% for item in pest_list %}
         <div class="col-md-4">
             <div class="card mb-4">
-                <img src="{{ url_for('static', filename=item[3]) }}" class="card-img-top" alt="{{ item['2'] }}">
+                <img src="{{ url_for('static', filename=item[4]) }}" class="card-img-top" alt="{{ item['2'] }}">
                 <div class="card-body">
                     <h5 class="card-title">{{ item[1] }}</h5>
                     <p class="card-text text-truncate">Common Name: {{ item[2] }}</p>
@@ -51,7 +51,4 @@
     </div>
 </div>
 
-<footer class="container-fluid p-5 bg-light text-black text-center">
-    <h5>AGRICULTURAL | BIOSECURITY | <a href="https://agpest.co.nz/">PEST</a> AND <a href="https://agpest.co.nz/">WEED</a></h5>
-</footer>
 {% endblock %}

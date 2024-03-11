@@ -15,6 +15,7 @@ import os
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from flask import current_app
+from flask import flash
 
 
 # get personal details
@@ -40,7 +41,6 @@ def admin_home():
 def admin_view_guides():
     if 'loggedin' in session:
         admin_info = get_admin_info(session['id'])
-
         cursor = getCursor()
         # fetch weed guides
         cursor.execute("SELECT * FROM guide_info WHERE item_type = 'weed'")
@@ -81,7 +81,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/admin/add_new', methods=['GET', 'POST'])
 def admin_add_new():
-    msg = ''
     connection = getConnection()
 
     if request.method == 'POST':
@@ -101,7 +100,9 @@ def admin_add_new():
         cursor.execute('SELECT COUNT(*) FROM guide_info WHERE name = %s OR common_name = %s', (name, common_name))
         existing_species_count = cursor.fetchone()[0]
         if existing_species_count > 0:
-            msg = 'Species already exists.'
+            return render_template('4_admin_add_new.html', 
+                                   msg='Species already exists.', 
+                                   msg_type='error')
         else:
             # Insert data into guide_info table
             cursor.execute('INSERT INTO guide_info (item_type, name, common_name, key_char, bio, impact, control, further_info) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)', (item_type, name, common_name, key_char, bio, impact, control, further_info))        
@@ -129,13 +130,12 @@ def admin_add_new():
                 update_image_path(guide_id, filename, image_id)  # Update image path and ID
                 
                 # Success message
-                flash('Species added successfully!', 'success')
                 return redirect(url_for('admin_view_guides'))
             else:
-                msg = 'No image file uploaded.'
-
-    return render_template('5_admin_view_add.html', msg=msg)
-
+                return render_template('5_admin_view_add.html', 
+                                   msg='Species already exists.', 
+                                   msg_type='error')
+            
 # Update image path and ID
 def update_image_path(guide_id, image_path, image_id):
     connection = getConnection()
@@ -334,6 +334,15 @@ def add_agro():
         if existing_user:
             msg = 'Account already exists!'
             return render_template('5_admin_manage_add_agro.html', msg=msg)
+        
+
+        # Check if email already exists
+        cursor = getCursor()
+        cursor.execute('SELECT * FROM user WHERE email = %s', (email,))
+        existing_email = cursor.fetchone()
+        if existing_email:
+            msg = 'Email already exists!'
+            return render_template('5_admin_manage_add_agro.html', msg=msg)
 
         # hash with salt
         hashed_password = hashing.hash_value(password, salt='8010')
@@ -502,15 +511,21 @@ def add_staff():
         email = request.form['email']
         role = request.form['role']
         status = request.form['status']
-        print("Form data:", request.form)
 
         # Check if username already exists
         cursor = getCursor()
         cursor.execute('SELECT * FROM user WHERE username = %s', (username,))
         existing_user = cursor.fetchone()
         if existing_user:
-            msg = 'Account already exists!'
-            return render_template('5_admin_manage_add_staff.html', msg=msg)
+            flash('Account already exists!', 'info')
+            return render_template('5_admin_manage_add_staff.html')
+
+        # Check if email already exists
+        cursor.execute('SELECT * FROM user WHERE email = %s', (email,))
+        existing_email = cursor.fetchone()
+        if existing_email:
+            flash('Email already exists!')
+            return render_template('5_admin_manage_add_staff.html')
 
         # hash with salt
         hashed_password = hashing.hash_value(password, salt='8010')

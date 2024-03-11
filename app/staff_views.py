@@ -114,7 +114,6 @@ def delete_guide(guide_id):
 
 @app.route('/admin/edit/<int:guide_id>', methods=['GET', 'POST'])
 def admin_edit_guide(guide_id):
-    msg = ''
     connection = getConnection()
     cursor = getCursor()
 
@@ -127,6 +126,7 @@ def admin_edit_guide(guide_id):
         impact = request.form['impact']
         control = request.form['control']
         further_info = request.form['further_info']
+        image_id = request.form['image_id']
         is_primary = request.form.get('is_primary') == 'on'
 
         # upload photo
@@ -136,12 +136,12 @@ def admin_edit_guide(guide_id):
             secure_filename_ = secure_filename(image_file.filename)
             filename = f"{timestamp}_{secure_filename_}"
             save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-
             # save photo
             image_file.save(save_path)
 
             # update
-            update_image_path(guide_id, filename, guide[11])
+            cursor.execute("UPDATE image SET image_path = %s WHERE image_id = %s", (save_path, image_id))            
+            connection.commit()
 
             # update for guide_info
             cursor.execute('''
@@ -151,9 +151,9 @@ def admin_edit_guide(guide_id):
                 WHERE guide_id = %s
             ''', (item_type, name, common_name, key_char, bio, impact, control, further_info, guide_id))
             connection.commit()
-            flash('Succeed.')
-
-            return redirect(url_for('admin_edit_guide', guide_id=guide_id))
+            return redirect(url_for('staff_view_guide',  
+                                    msg='Guide updated successfully.',
+                                    mesg_type='success'))
 
     # get guide info
     cursor.execute("""
@@ -166,8 +166,9 @@ def admin_edit_guide(guide_id):
         WHERE guide_info.guide_id = %s
     """, (guide_id,))
     guide = cursor.fetchone()
-
-    return render_template('5_admin_view_edit.html', guide=guide, msg=msg, is_primary=guide[10])
+    return render_template('4_staff_view_edit.html', 
+                           guide=guide, 
+                           is_primary=guide[10])
 
 @app.route('/staff/<item_type>/<int:guide_id>')
 def staff_view_guides_list(guide_id, item_type):
@@ -187,10 +188,12 @@ def staff_view_guides_list(guide_id, item_type):
         return render_template('4_staff_view_guide_list.html', item_info=item_info, is_primary=item_info[10])
     else:
         return render_template('404.html')
-    
+
+# define upload file
+UPLOAD_FOLDER = os.path.join(os.getcwd(), 'app', 'static')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/staff/add_new', methods=['GET', 'POST'])
 def staff_add_new():
-    msg = '' 
     connection = getConnection()
 
     if request.method == 'POST':
@@ -202,61 +205,60 @@ def staff_add_new():
         impact = request.form['impact']
         control = request.form['control']
         further_info = request.form['further_info']
-        is_primary = request.form.get('is_primary') == 'on'  # Convert checkbox value to boolean
-        image_data = request.files['image_data']
-        print("Form data:", request.form)
+        is_primary = request.form.get('is_primary') == 'on'
 
         cursor = getCursor()
 
-        # Check if the species already exists
+        # Check if species already exists
         cursor.execute('SELECT COUNT(*) FROM guide_info WHERE name = %s OR common_name = %s', (name, common_name))
         existing_species_count = cursor.fetchone()[0]
         if existing_species_count > 0:
-            # Species already exists
-            msg = 'Species already exists.'
-
+            return render_template('4_staff_view_add.html', 
+                                   msg='Species already exists.', 
+                                   msg_type='error')
         else:
+            # Insert data into guide_info table
+            cursor.execute('INSERT INTO guide_info (item_type, name, common_name, key_char, bio, impact, control, further_info) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)', (item_type, name, common_name, key_char, bio, impact, control, further_info))        
+            connection.commit()
+            guide_id = cursor.lastrowid
+
             # Handle image upload
-            if image_data:
-                # Check image size
-                if len(image_data.read()) > 64 * 1024:  # Convert KB to bytes
-                    msg = 'Please upload an image smaller than 64KB.'
-                else:
-                    # Reset file pointer after reading
-                    image_data.seek(0)
+            image_file = request.files.get('image')
+            if image_file and image_file.filename:
+                timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+                secure_filename_ = secure_filename(image_file.filename)
+                filename = f"{timestamp}_{secure_filename_}"
+                save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                
+                print("Save path:", save_path)  # Print save_path for debugging
+                
+                # Save the image
+                image_file.save(save_path)
+                
+                # Insert image information into image table
+                cursor.execute('INSERT INTO image (guide_id, image_path, is_primary) VALUES (%s, %s, %s)', (guide_id, filename, is_primary))
+                connection.commit()
+                image_id = cursor.lastrowid
 
-                    # Read image data
-                    image_data = image_data.read()
+                update_image_path(guide_id, filename, image_id)  # Update image path and ID
+                
+                # Success message
+                return redirect(url_for('staff_view_guide'))
+            else:
+                return render_template('4_staff_view_add.html', 
+                                   msg='Species already exists.', 
+                                   msg_type='error')
 
-                    # Store image data as blob in MySQL
-                    cursor.execute('INSERT INTO image (is_primary, image_data) VALUES (%s, %s)', (is_primary, image_data))
-                    # Get the last inserted image_id
-                    image_id = cursor.lastrowid
-
-                    # Insert other data along with the image
-                    cursor.execute('INSERT INTO guide_info (item_type, name, common_name, key_char, bio, impact, control, further_info, image_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', (item_type, name, common_name, key_char, bio, impact, control, further_info, image_id))
-                    guide_id = cursor.lastrowid
-
-                    # Update guide_id in the image table
-                    cursor.execute('UPDATE image SET guide_id = %s WHERE image_id = %s', (guide_id, image_id))
-                    # Update other fields in the guide_info table
-                    cursor.execute('UPDATE guide_info SET item_type = %s, name = %s, common_name = %s, key_char = %s, bio = %s, impact = %s, control = %s, further_info = %s WHERE guide_id = %s', (item_type, name, common_name, key_char, bio, impact, control, further_info, guide_id))
-                    connection.commit()
-
-                    # Success flash message
-                    flash('Species added successfully!', 'success')
-    
-    return render_template('4_staff_view_add.html', msg=msg)
+    return render_template('4_staff_view_add.html')
 
 @app.route('/staff/view_agro_profile')
 def staff_view_agro():
     if 'loggedin' in session:
         # login and fetch details
-        cursor = getCursor()
-        cursor.execute('SELECT * FROM staff_admin WHERE user_id = %s', (session['id'],))
-        staff_info = cursor.fetchone()
+        staff_info = get_staff_info(session['id'])
         print("staff Info:", staff_info)
 
+        cursor = getCursor()
         cursor.execute('''
             SELECT agro.agro_id, agro.first_name, agro.last_name, agro.address, 
             agro.phone_num, agro.date_joined, user.username, user.email, user.status
@@ -273,9 +275,7 @@ def staff_profile():
     # check if loggined
     if 'loggedin' in session:
         # login and fetch details
-        cursor = getCursor()
-        cursor.execute('SELECT * FROM staff_admin WHERE user_id = %s', (session['id'],))
-        staff_info = cursor.fetchone()
+        staff_info = get_staff_info(session['id'])
         print("staff Info:", staff_info)
 
         if request.method == 'POST':
@@ -294,6 +294,16 @@ def staff_profile():
             print("Form Data - New Password:", new_password)
             print("Form Data - Confirm Password:", confirm_password)
 
+            cursor = getCursor()
+            # check if email is existing
+            cursor.execute('SELECT * FROM user WHERE email = %s AND user_id != %s', (email, session['id']))
+            existing_user = cursor.fetchone()
+            if existing_user:
+                # if the email already exists
+                return render_template('4_staff_profile.html', 
+                                       msg='The email is already in use.', 
+                                       msg_type='error',
+                                       staff=staff_info)
 
             # verify password
             cursor.execute('SELECT password FROM user WHERE user_id = %s', (session['id'],))

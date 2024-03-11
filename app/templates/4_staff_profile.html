@@ -37,6 +37,12 @@
     </div>
 </nav>
 
+<div class="container">
+    {% if msg %}
+        <div class="alert alert-{{ msg_type }}">
+            {{ msg }}
+        </div>
+    {% endif %}
 
     <div class="container mt-5">
         <form action="{{ url_for('staff_profile') }}" method="post">
@@ -79,27 +85,5 @@
         </form>
     </div>
 </div>
-
-<div id="msg" style="display: none;">{{ msg }}</div>
-
-<script>
-    // loading and execute
-    document.addEventListener('DOMContentLoaded', function () {
-        // check if 'msg'
-        var msgElement = document.getElementById('msg');
-        
-        // find msg
-        if (msgElement && msgElement.textContent.trim() !== '') {
-            // show msg
-            alert(msgElement.textContent.trim());
-        }
-    });
-
-</script>
-
-
-<footer class="container-fluid p-5 bg-light text-black text-center">
-    <h5>AGRICULTURAL | BIOSECURITY | PEST AND WEED</h5>
-    </footer>
 
 {% endblock %}

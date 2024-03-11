@@ -82,6 +82,17 @@ def agro_profile():
             print("Form Data - New Password:", new_password)
             print("Form Data - Confirm Password:", confirm_password)
 
+
+            # check if the new email already exists
+            cursor.execute('SELECT * FROM user WHERE email = %s AND user_id != %s', (email, session['id']))
+            existing_user = cursor.fetchone()
+            if existing_user:
+                # if the email already exists
+                return render_template('3_agro_profile.html', 
+                           msg='The email is already in use.', 
+                           msg_type='error',
+                           agro=agro_info)
+            
             # verify password
             cursor.execute('SELECT password FROM user WHERE user_id = %s', (session['id'],))
             stored_password = cursor.fetchone()[0]
