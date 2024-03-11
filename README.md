@@ -40,12 +40,12 @@
       - `/css`: Contains CSS files for styling the web pages.
       - `/images.jpg`: image file.
   - `run.py`: The entry point to run the Flask application.
+  
+2. The web through 'POST' and 'GET' to fetches and displays the details to send the request to update the database. 
+3. Use different HTML to redirect to different page. 
 
 # Getting Started
 - Please read requirment.txt to install.
-
-2. The web through 'POST' and 'GET' to fetches and displays the details to send the request to update the database. 
-3. Use different HTML to redirect to different page. 
 
 # Design decision
 - My main point of this web is
