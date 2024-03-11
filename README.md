@@ -21,28 +21,28 @@
 
 ## Web application structure
 1. The whole Web structure has been refactoring by role. 
-- /Biosecurity
--     /app
--        --init--.py
--       admin_view.py
--        agro_view.py
--        connect.py
--        database.py
--        guide_views.py
--        login_register_logout.py
--        public.py
--        staff_views.py
--        /templates
--            ------
--            ...
--            login.html
--            ....
--            ------
--        /static
--            /css
--            /images.jpg
--    run.py
--    requirement.txt
+- `/Biosecurity`: Root directory of the project.
+  - `/app`: Contains the Flask application and its modules.
+    - `__init__.py`: Initializes the Flask application and brings together all the components.
+    - `admin_view.py`: Contains routes and views for the admin.
+    - `agro_view.py`: Contains routes and views for agronomists.
+    - `connect.py`: Configuration file for database connection.
+    - `database.py`: Contains database connection.
+    - `guide_views.py`: Contains routes and views for guide.
+    - `login_register_logout.py`: User authentication, registration, and logout.
+    - `public.py`: Contains routes and views for public pages.
+    - `staff_views.py`: Contains routes and views for staff.
+    - `/templates`: Contains HTML templates for rendering views.
+      - `xxx.html`: -------------------------------
+      - (additional HTML templates for other views)
+      - `xxx.html`: -------------------------------
+    - `/static`: Contains static files such as CSS stylesheets and images.
+      - `/css`: Contains CSS files for styling the web pages.
+      - `/images.jpg`: image file.
+  - `run.py`: The entry point to run the Flask application.
+
+# Getting Started
+- Please read requirment.txt to install.
 
 2. The web through 'POST' and 'GET' to fetches and displays the details to send the request to update the database. 
 3. Use different HTML to redirect to different page. 
