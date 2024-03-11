@@ -5,7 +5,7 @@ DROP DATABASE `ladybug`; -- DO NOT PUSH
 
 -- create table
 USE `ladybug`;
-
+select * from `user`;
 -- create user table - manager user
 CREATE TABLE `user`(
 	`user_id` INT AUTO_INCREMENT,
@@ -20,19 +20,19 @@ CREATE TABLE `user`(
 -- insert data - user
 INSERT INTO `user` (`username`, `password`, `email`, `role`, `status`)
 VALUES
-('cindyyang', 'password123', 'cindy.yang@example.com', 'agronomist', 'active'),
-('jennywang', 'password123', 'jenny.wang@example.com', 'agronomist', 'active'),
-('lilili', 'password123', 'lili.li@example.com', 'agronomist', 'active'),
-('harryporter', 'password123', 'harry.porter@example.com', 'agronomist', 'active'),
-('pinapple123', 'password123', 'pinapple.blueberry@example.com', 'agronomist', 'active');
+('cindyyang', '00d4ecaf313aacce627c1aea42b15e4987e3a288a70aa6efedd234562d406b37', 'cindy.yang@example.com', 'agronomist', 'active'),
+('jennywang', '00d4ecaf313aacce627c1aea42b15e4987e3a288a70aa6efedd234562d406b37', 'jenny.wang@example.com', 'agronomist', 'active'),
+('lilili', '00d4ecaf313aacce627c1aea42b15e4987e3a288a70aa6efedd234562d406b37', 'lili.li@example.com', 'agronomist', 'active'),
+('harryporter', '00d4ecaf313aacce627c1aea42b15e4987e3a288a70aa6efedd234562d406b37', 'harry.porter@example.com', 'agronomist', 'active'),
+('pinapple123', '00d4ecaf313aacce627c1aea42b15e4987e3a288a70aa6efedd234562d406b37', 'pinapple.blueberry@example.com', 'agronomist', 'active');
 
 -- insert data - staff
 INSERT INTO `user` (`user_id`, `username`, `password`, `email`, `role`)
 VALUES
-('1', 'rita123', 'password123', 'rita.chen@example.com', 'admin'),
-('2', 'lyn123', 'password123', 'lyn.jin@example.com', 'staff'),
-('3', 'lana1124', 'password123', 'lana.su@example.com', 'staff'),
-('4', 'fye1156', 'password123', 'fye.xiang@example.com', 'staff');
+('1', 'rita123', '00d4ecaf313aacce627c1aea42b15e4987e3a288a70aa6efedd234562d406b37', 'rita.chen@example.com', 'admin'),
+('2', 'lyn123', '00d4ecaf313aacce627c1aea42b15e4987e3a288a70aa6efedd234562d406b37', 'lyn.jin@example.com', 'staff'),
+('3', 'lana1124', '00d4ecaf313aacce627c1aea42b15e4987e3a288a70aa6efedd234562d406b37', 'lana.su@example.com', 'staff'),
+('4', 'fye1156', '00d4ecaf313aacce627c1aea42b15e4987e3a288a70aa6efedd234562d406b37', 'fye.xiang@example.com', 'staff');
 
 -- create agro table
 CREATE TABLE `agro`(
