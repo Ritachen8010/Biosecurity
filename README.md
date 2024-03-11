@@ -13,8 +13,6 @@
 - Agronomists - Able to view guide of pest and weed, manager their own account (edit name, password, address, email, and phone number).
 - Staff - As a mid level of manager the web able to view agronomists list and manager guide infor(edit, delete and add new species) and manager their own account (edit name, email, work phone number).
 
-- Staff - Able to view Agronomists list, view/edit guide and manager their own account (edit name, email, work phone number).
-
 - Admin - Hold the highest control to view agronomists, staff and guide details/add/edit/delete, and manager their own account (edit name, email, work phone number).
 
 - According to the requirement above I have achieved most of the functions which is an easy and friendly interface, except the image function which still needs to fix the delete and edit.
@@ -44,10 +42,10 @@
 2. The web through 'POST' and 'GET' to fetches and displays the details to send the request to update the database. 
 3. Use different HTML to redirect to different page. 
 
-# Getting Started
+## Getting Started
 - Please read requirment.txt to install.
 
-# Design decision
+## Design decision
 - My main point of this web is
 1. easy to use
 2. match with agricultural theme
@@ -68,5 +66,5 @@
 
 ## Demo
 - AGRICULTURAL | BIOSECURITY | PEST AND WEED
-- http://ritachen1126418.pythonanywhere.com/
+- http://ritachen1126418.pythonanywhere.com/ 
 
