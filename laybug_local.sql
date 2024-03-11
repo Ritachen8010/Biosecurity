@@ -50,11 +50,11 @@ CREATE TABLE `agro`(
 -- insert data - agro
 INSERT INTO `agro` (`user_id`, `first_name`, `last_name`, `address`, `phone_num`, `date_joined`)
 VALUES
-(26, 'Cindy', 'Yang', '123 Main St, Anytown', '021-12345678', '2013-06-05'),
-(27, 'Jenny', 'Wang', '68 One St, Anytown', '021-88866601', '2018-08-12'),
-(28, 'Lili', 'LI', '3 Small St, Anytown', '021-45622310', '2001-02-12'),
-(29, 'Harry', 'Porter', '4 Privet St, Anytown', '021-55562317', '2011-01-30'),
-(30, 'Liam', 'William', '99 Sea St, Anytown', '021-42215618', '2011-01-30');
+(25, 'Cindy', 'Yang', '123 Main St, Anytown', '021-12345678', '2013-06-05'),
+(26, 'Jenny', 'Wang', '68 One St, Anytown', '021-88866601', '2018-08-12'),
+(27, 'Lili', 'LI', '3 Small St, Anytown', '021-45622310', '2001-02-12'),
+(28, 'Harry', 'Porter', '4 Privet St, Anytown', '021-55562317', '2011-01-30'),
+(29, 'Liam', 'William', '99 Sea St, Anytown', '021-42215618', '2011-01-30');
 
 -- create staff_admin table
 CREATE TABLE `staff_admin`(

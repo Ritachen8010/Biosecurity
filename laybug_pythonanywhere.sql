@@ -13,19 +13,19 @@ CREATE TABLE `user`(
 -- insert data - user
 INSERT INTO `user` (`username`, `password`, `email`, `role`, `status`)
 VALUES
-('cindyyang', '00d4ecaf313aacce627c1aea42b15e4987e3a288a70aa6efedd234562d406b37', 'cindy.yang@example.com', 'agronomist', 'active'),
-('jennywang', '00d4ecaf313aacce627c1aea42b15e4987e3a288a70aa6efedd234562d406b37', 'jenny.wang@example.com', 'agronomist', 'active'),
-('lilili', '00d4ecaf313aacce627c1aea42b15e4987e3a288a70aa6efedd234562d406b37', 'lili.li@example.com', 'agronomist', 'active'),
-('harryporter', '00d4ecaf313aacce627c1aea42b15e4987e3a288a70aa6efedd234562d406b37', 'harry.porter@example.com', 'agronomist', 'active'),
-('pinapple123', '00d4ecaf313aacce627c1aea42b15e4987e3a288a70aa6efedd234562d406b37', 'pinapple.blueberry@example.com', 'agronomist', 'active');
+('cindyyang', 'password123', 'cindy.yang@example.com', 'agronomist', 'active'),
+('jennywang', 'password123', 'jenny.wang@example.com', 'agronomist', 'active'),
+('lilili', 'password123', 'lili.li@example.com', 'agronomist', 'active'),
+('harryporter', 'password123', 'harry.porter@example.com', 'agronomist', 'active'),
+('pinapple123', 'password123', 'pinapple.blueberry@example.com', 'agronomist', 'active');
 
 -- insert data - staff
 INSERT INTO `user` (`user_id`, `username`, `password`, `email`, `role`)
 VALUES
-('1', 'rita123', '00d4ecaf313aacce627c1aea42b15e4987e3a288a70aa6efedd234562d406b37', 'rita.chen@example.com', 'admin'),
-('2', 'lyn123', '00d4ecaf313aacce627c1aea42b15e4987e3a288a70aa6efedd234562d406b37', 'lyn.jin@example.com', 'staff'),
-('3', 'lana1124', '00d4ecaf313aacce627c1aea42b15e4987e3a288a70aa6efedd234562d406b37', 'lana.su@example.com', 'staff'),
-('4', 'fye1156', '00d4ecaf313aacce627c1aea42b15e4987e3a288a70aa6efedd234562d406b37', 'fye.xiang@example.com', 'staff');
+('1', 'rita123', 'password123', 'rita.chen@example.com', 'admin'),
+('2', 'lyn123', 'password123', 'lyn.jin@example.com', 'staff'),
+('3', 'lana1124', 'password123', 'lana.su@example.com', 'staff'),
+('4', 'fye1156', 'password123', 'fye.xiang@example.com', 'staff');
 
 -- create agro table
 CREATE TABLE `agro`(
@@ -43,11 +43,11 @@ CREATE TABLE `agro`(
 -- insert data - agro
 INSERT INTO `agro` (`user_id`, `first_name`, `last_name`, `address`, `phone_num`, `date_joined`)
 VALUES
-(26, 'Cindy', 'Yang', '123 Main St, Anytown', '021-12345678', '2013-06-05'),
-(27, 'Jenny', 'Wang', '68 One St, Anytown', '021-88866601', '2018-08-12'),
-(28, 'Lili', 'LI', '3 Small St, Anytown', '021-45622310', '2001-02-12'),
-(29, 'Harry', 'Porter', '4 Privet St, Anytown', '021-55562317', '2011-01-30'),
-(30, 'Liam', 'William', '99 Sea St, Anytown', '021-42215618', '2011-01-30');
+(25, 'Cindy', 'Yang', '123 Main St, Anytown', '021-12345678', '2013-06-05'),
+(26, 'Jenny', 'Wang', '68 One St, Anytown', '021-88866601', '2018-08-12'),
+(27, 'Lili', 'LI', '3 Small St, Anytown', '021-45622310', '2001-02-12'),
+(28, 'Harry', 'Porter', '4 Privet St, Anytown', '021-55562317', '2011-01-30'),
+(29, 'Liam', 'William', '99 Sea St, Anytown', '021-42215618', '2011-01-30');
 
 -- create staff_admin table
 CREATE TABLE `staff_admin`(
