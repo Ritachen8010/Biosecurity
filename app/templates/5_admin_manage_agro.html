@@ -89,7 +89,7 @@
                         </form>
                     </td>
                     <td>
-                        <form id="agroId" action="{{ url_for('delete_agro', agro_id=agro[0]) }}" method="POST">
+                        <form id="{{ agro[0]}}" action="{{ url_for('delete_agro', agro_id=agro[0]) }}" method="POST">
                             <input type="hidden" name="agro_id" value="{{ agro[0] }}">
                             <button type="submit" class="btn btn-danger" onclick="confirmDelete(event, {{ agro[0] }} )">Delete</button>
                         </form>                        
@@ -112,13 +112,11 @@
         event.preventDefault(); // prevent form post
 
         if (confirm('Are you sure you want to delete this agronomist?')) {
-            document.getElementById('agroId').submit();
+            document.getElementById(agroId).submit();
+            // console.log(new FormData(document.getElementById('agroId')))
         }
     }
-</script>
 
-
-<script>
     // close flash msg when close button is clicked
     document.querySelectorAll('.close').forEach(function(closeButton) {
         closeButton.addEventListener('click', function() {
