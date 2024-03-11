@@ -1,72 +1,72 @@
 # Biosecurity
-COMP639 Assignment 1 - Individual
-Student Name:Yingyue(Rita) Chen
-Student ID: 1126418
+- COMP639 Assignment 1 - Individual
+- Student Name:Yingyue(Rita) Chen
+- Student ID: 1126418
 
 ## Project Description
-This project is to develop a Python Web app functioning as a biosecurity guide, providing information on agricultural pests and weeds present in New Zealand. The Web comes with agricultural theme which is friendly-use interface that contain three different user role and access control: Agronomists, Staff and Administrator. 
+- This project is to develop a Python Web app functioning as a biosecurity guide, providing information on agricultural pests and weeds present in New Zealand. The Web comes with agricultural theme which is friendly-use interface that contain three different user role and access control: Agronomists, Staff and Administrator. 
 
 + User ID, Staff ID, Agronomists ID, Guide ID and Image ID is unique and primary key (cannot edit).
 
 + Username is unique(cannot edit).
 
-Agronomists - Able to view guide of pest and weed, manager their own account (edit name, password, address, email, and phone number).
-Staff - As a mid level of manager the web able to view agronomists list and manager guide infor(edit, delete and add new species) and manager their own account (edit name, email, work phone number).
+- Agronomists - Able to view guide of pest and weed, manager their own account (edit name, password, address, email, and phone number).
+- Staff - As a mid level of manager the web able to view agronomists list and manager guide infor(edit, delete and add new species) and manager their own account (edit name, email, work phone number).
 
-Staff - Able to view Agronomists list, view/edit guide and manager their own account (edit name, email, work phone number).
+- Staff - Able to view Agronomists list, view/edit guide and manager their own account (edit name, email, work phone number).
 
-Admin - Hold the highest control to view agronomists, staff and guide details/add/edit/delete, and manager their own account (edit name, email, work phone number).
+- Admin - Hold the highest control to view agronomists, staff and guide details/add/edit/delete, and manager their own account (edit name, email, work phone number).
 
-According to the requirement above I have achieved most of the functions which is an easy and friendly interface, except the image function which still needs to fix the delete and edit.
+- According to the requirement above I have achieved most of the functions which is an easy and friendly interface, except the image function which still needs to fix the delete and edit.
 
 ## Web application structure
 1. The whole Web structure has been refactoring by role. 
-/Biosecurity
-    /app
-        --init--.py
-        admin_view.py
-        agro_view.py
-        connect.py
-        database.py
-        guide_views.py
-        login_register_logout.py
-        public.py
-        staff_views.py
-        /templates
-            ------
-            ...
-            login.html
-            ....
-            ------
-        /static
-            /css
-            /images.jpg
-    run.py
-    requirement.txt
+- /Biosecurity
+-     /app
+-        --init--.py
+-       admin_view.py
+-        agro_view.py
+-        connect.py
+-        database.py
+-        guide_views.py
+-        login_register_logout.py
+-        public.py
+-        staff_views.py
+-        /templates
+-            ------
+-            ...
+-            login.html
+-            ....
+-            ------
+-        /static
+-            /css
+-            /images.jpg
+-    run.py
+-    requirement.txt
 
 2. The web through 'POST' and 'GET' to fetches and displays the details to send the request to update the database. 
 3. Use different HTML to redirect to different page. 
 
 # Design decision
-My main point of this web is
+- My main point of this web is
 1. easy to use
 2. match with agricultural theme
 3. a message prompt will be returned for operation.
-Therefore, the main color is green and provide relate support tools for user eg, met service and information of weeds and pests. 
+- Therefore, the main color is green and provide relate support tools for user eg, met service and information of weeds and pests. 
 
 ## Database design
-The database I have design that is put comonly value together, eg: Agronomists, Staff and Admin they both need name, email, role and status. Therefore, I can put these value into one table and create tables based on different role or function. 
+- The database I have design that is put comonly value together, eg: Agronomists, Staff and Admin they both need name, email, role and status. Therefore, I can put these value into one table and create tables based on different role or function. 
 
-user (stored account and details)
-agronomists (stored agronomists value)
-staff + admin (as they are requir same value therefore they could join one value)
-guide info (stored guide info only)
-image (stored image only)
+- user (stored account and details)
+- agronomists (stored agronomists value)
+- staff + admin (as they are requir same value therefore they could join one value)
+- guide info (stored guide info only)
+- image (stored image only)
 
 + agronomists and staff + admin references user as forgeigner key.
 + guide info as foreigner key to image.
 
 ## Demo
-AGRICULTURAL | BIOSECURITY | PEST AND WEED
-http://ritachen1126418.pythonanywhere.com/
+- AGRICULTURAL | BIOSECURITY | PEST AND WEED
+- http://ritachen1126418.pythonanywhere.com/
 
